@@ -19,8 +19,8 @@ export default function Auth() {
           onClick={() => {
             setMode(mode === "login" ? "signup" : "login");
           }}
-          className="w-full shadow hover:text-primary-foreground dark:hover:text-white"
-          variant={"outline"}
+          className="w-full p-0 m-0 h-fit"
+          variant={"link"}
         >
           or {mode === "login" ? "Sign Up" : "Log In"}
         </Button>
