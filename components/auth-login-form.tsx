@@ -37,14 +37,10 @@ export function AuthLogInForm() {
   });
 
   const route = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
-
     const { error } = await logIn(values);
     if (error) return console.log(error);
-
-    setIsSubmitting(false);
 
     route.replace("/");
   }
@@ -73,14 +69,29 @@ export function AuthLogInForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Password" {...field} />
+                <Input
+                  type={showPassword ? "password" : "text"}
+                  placeholder="Password"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        {form.getValues().password && (
+          <Button
+            onClick={() => {
+              setShowPassword((prev) => !prev);
+            }}
+            variant={"link"}
+            className="w-full p-0 m-0 h-fit"
+          >
+            {!showPassword ? "hide" : "show"} password
+          </Button>
+        )}
         <Button type="submit" className="w-full text-white shadow">
-          {isSubmitting ? (
+          {form.formState.isSubmitting ? (
             <div className=" animate-spin">
               <FaSpinner />
             </div>
