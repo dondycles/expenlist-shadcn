@@ -15,6 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { logIn } from "@/actions/user/login";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { FaSpinner } from "react-icons/fa";
 
 const formSchema = z.object({
   username: z.string().min(1, {
@@ -35,10 +37,15 @@ export function AuthLogInForm() {
   });
 
   const route = useRouter();
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { error, success } = await logIn(values);
+    setIsSubmitting(true);
+
+    const { error } = await logIn(values);
     if (error) return console.log(error);
+
+    setIsSubmitting(false);
+
     route.replace("/");
   }
 
@@ -73,7 +80,13 @@ export function AuthLogInForm() {
           )}
         />
         <Button type="submit" className="w-full text-white shadow">
-          Log In
+          {isSubmitting ? (
+            <div className=" animate-spin">
+              <FaSpinner />
+            </div>
+          ) : (
+            "Log In"
+          )}
         </Button>
       </form>
     </Form>

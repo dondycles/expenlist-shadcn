@@ -8,7 +8,7 @@ const supabase = createServerComponentClient({ cookies });
 
 export default async function TopNavBar() {
   const user = await supabase.auth.getUser();
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("user")
     .select("*")
     .eq("userId", user.data.user?.id)
