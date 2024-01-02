@@ -3,8 +3,10 @@ import { ModeToggle } from "./theme-button";
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import TopNavBarUserButton from "./top-navbar-user-button";
+
+const supabase = createServerComponentClient({ cookies });
+
 export default async function TopNavBar() {
-  const supabase = createServerComponentClient({ cookies });
   const user = await supabase.auth.getUser();
   const { data, error } = await supabase
     .from("user")
