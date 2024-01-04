@@ -13,51 +13,47 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { logIn } from "@/actions/user/login";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { FaSpinner } from "react-icons/fa";
+import { useState } from "react";
+import { addExpense } from "@/actions/expense/add";
 
 const formSchema = z.object({
-  username: z.string().min(1, {
-    message: "Please input your username.",
+  cost: z.string().min(1, {
+    message: "Please input the cost.",
   }),
-  password: z.string().min(1, {
-    message: "Please input your password.",
+  name: z.string().min(1, {
+    message: "Please input the name.",
   }),
 });
 
-export function AuthLogInForm() {
+export function ExpenseForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
-      password: "",
+      cost: "",
+      name: "",
     },
   });
 
-  const route = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { error } = await logIn(values);
-    if (error) return console.log(error);
+    const { error, success } = await addExpense({
+      cost: values.cost,
+      name: values.name,
+    });
 
-    route.replace("/");
+    form.reset();
   }
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className=" space-y-2 max-w-[400px]"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="px-4 space-y-2">
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Username" {...field} />
+                <Input placeholder="Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -65,39 +61,24 @@ export function AuthLogInForm() {
         />
         <FormField
           control={form.control}
-          name="password"
+          name="cost"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input
-                  type={!showPassword ? "password" : "text"}
-                  placeholder="Password"
-                  {...field}
-                />
+                <Input placeholder="Cost" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        {form.getValues().password && (
-          <Button
-            type="button"
-            onClick={() => {
-              setShowPassword((prev) => !prev);
-            }}
-            variant={"link"}
-            className="w-full p-0 m-0 h-fit"
-          >
-            {!showPassword ? "hide" : "show"} password
-          </Button>
-        )}
+
         <Button type="submit" className="w-full text-white shadow">
           {form.formState.isSubmitting ? (
             <div className=" animate-spin">
               <FaSpinner />
             </div>
           ) : (
-            "Log In"
+            "ADD"
           )}
         </Button>
       </form>

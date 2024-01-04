@@ -79,7 +79,7 @@ export function AuthSignUpForm() {
             <FormItem>
               <FormControl>
                 <Input
-                  type={showPassword ? "password" : "text"}
+                  type={!showPassword ? "password" : "text"}
                   placeholder="Password"
                   {...field}
                 />
@@ -95,7 +95,7 @@ export function AuthSignUpForm() {
             <FormItem>
               <FormControl>
                 <Input
-                  type={showPassword ? "password" : "text"}
+                  type={!showPassword ? "password" : "text"}
                   placeholder="Confirm Password"
                   {...field}
                 />

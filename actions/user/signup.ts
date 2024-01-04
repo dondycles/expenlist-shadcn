@@ -26,10 +26,10 @@ export const signUp = async (user: FieldValues) => {
     return { error: error.message };
   }
 
-  const { statusText } = await supabase.from("user").insert([
+  const { statusText } = await supabase.from("user_data").insert([
     {
-      userName: user.username,
-      userId: data.user?.id,
+      user_name: user.username,
+      user_id: data.user?.id,
     },
   ]);
 

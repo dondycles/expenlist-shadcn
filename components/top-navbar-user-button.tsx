@@ -19,7 +19,7 @@ export default function TopNavBarUserButton({ user }: { user: any }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost">
-          <span className="text-white">{user.userName}</span>
+          <span className="text-white">{user.user_name}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
