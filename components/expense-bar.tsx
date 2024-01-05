@@ -19,9 +19,12 @@ export default function ExpenseBar({ expense }: { expense: any }) {
     console.log(error, success);
   };
   const edit_ = async () => {
+    if (editedValue.cost === expense.cost && editedValue.name === expense.name)
+      return setEdit(false);
+
     const { error, success } = await editExpense({
-      cost: editedValue.cost,
-      name: editedValue.name,
+      cost: editedValue.cost === expense.cost ? expense.cost : editedValue.cost,
+      name: editedValue.name === expense.name ? expense.name : editedValue.name,
       id: expense.id,
     });
 
@@ -33,7 +36,7 @@ export default function ExpenseBar({ expense }: { expense: any }) {
   return (
     <div
       key={expense.id}
-      className="w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/5 p-2"
+      className="w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-2 gap-2"
     >
       {edit ? (
         <>

@@ -1,3 +1,4 @@
+import { usePhpPeso } from "@/lib/phpformatter";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 var _ = require("lodash");
@@ -16,7 +17,7 @@ export default async function ListTotal() {
 
   return (
     <div className="flex flex-row items-center gap-2">
-      <p>Total Expenses today: {total}</p>
+      <p>{usePhpPeso(total)}</p>
     </div>
   );
 }

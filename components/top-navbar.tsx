@@ -14,7 +14,7 @@ export default async function TopNavBar() {
     .eq("user_id", user.data.user?.id)
     .single();
   return (
-    <nav className="flex flex-row items-center justify-between p-4 text-primary-foreground bg-primary">
+    <nav className="flex flex-row items-center justify-between py-4 text-primary-foreground bg-primary px-4 md:px-32 lg:px-64 xl:px-[512px]">
       <Link href={"/"} className="text-xl font-extrabold">
         Expenlist.
       </Link>
