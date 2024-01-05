@@ -47,7 +47,7 @@ export default function ListBottomActionButtons({
             mode="single"
             selected={date}
             onSelect={(e) => {
-              setDate(new Date(e!.toLocaleDateString()));
+              setDate(new Date(e!.toDateString()));
             }}
             initialFocus
           />

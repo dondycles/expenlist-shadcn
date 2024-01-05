@@ -15,7 +15,7 @@ export default function Lists({
         List all of your expenses for today.{" "}
         {searchParams.date
           ? new Date(searchParams.date).toLocaleDateString()
-          : new Date().toLocaleDateString()}{" "}
+          : currentDate.toLocaleDateString()}{" "}
       </p>
 
       <ListExpenses date={searchParams.date} />
