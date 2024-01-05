@@ -11,22 +11,22 @@ export default function Lists({
   const currentDate = new Date();
   return (
     <main className="flex flex-col w-full h-full max-h-full gap-2 py-4 overflow-auto  px-4 md:px-32 lg:px-64 xl:px-[512px]">
-      <p className="">
+      {/* <p className="">
         List all of your expenses for today.{" "}
         {searchParams.date
           ? new Date(searchParams.date).toLocaleDateString()
           : currentDate.toLocaleDateString()}{" "}
-      </p>
+      </p> */}
 
+      <ListBottomActionButtons>
+        <ListTotal />
+      </ListBottomActionButtons>
       <ListExpenses date={searchParams.date} />
       {currentDate
         .toLocaleDateString()
         .match(new Date(searchParams.date).toLocaleDateString()) && (
         <ExpenseForm />
       )}
-      <ListBottomActionButtons>
-        <ListTotal />
-      </ListBottomActionButtons>
     </main>
   );
 }
