@@ -9,7 +9,8 @@ export default async function ListExpenses({ date }: { date: string }) {
   const { data, error } = await supabase
     .from("expenses")
     .select("*")
-    .eq("date", date ? date : new Date().toDateString());
+    .eq("date", date ? date : new Date().toDateString())
+    .order("created_at", { ascending: true });
   return (
     <div className="flex flex-col h-full max-h-full gap-2 overflow-auto">
       {data?.map((expense) => {

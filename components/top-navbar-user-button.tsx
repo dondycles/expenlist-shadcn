@@ -21,7 +21,7 @@ export default function TopNavBarUserButton({ user }: { user: any }) {
           <span className="">{user.user_name}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
 

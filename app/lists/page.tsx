@@ -32,7 +32,7 @@ export default function Lists({
                   <FaPlus />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-fit">
+              <PopoverContent align="end" className="w-fit">
                 <ExpenseForm />
               </PopoverContent>
             </Popover>

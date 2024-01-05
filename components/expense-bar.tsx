@@ -9,7 +9,10 @@ import { editExpense } from "@/actions/expense/edit";
 import { usePhpPeso } from "@/lib/phpformatter";
 
 export default function ExpenseBar({ expense }: { expense: any }) {
-  const [edit, setEdit] = useState(false);
+  const [modification, setModification] = useState<"edit" | "delete" | null>(
+    null
+  );
+  const [confirm, setConfirm] = useState(false);
   const [editedValue, setEditedValue] = useState({
     name: expense.name,
     cost: expense.cost,
@@ -19,8 +22,14 @@ export default function ExpenseBar({ expense }: { expense: any }) {
     console.log(error, success);
   };
   const edit_ = async () => {
-    if (editedValue.cost === expense.cost && editedValue.name === expense.name)
-      return setEdit(false);
+    if (
+      editedValue.cost === expense.cost &&
+      editedValue.name === expense.name
+    ) {
+      setConfirm(false);
+      setModification(null);
+      return;
+    }
 
     const { error, success } = await editExpense({
       cost: editedValue.cost === expense.cost ? expense.cost : editedValue.cost,
@@ -31,14 +40,20 @@ export default function ExpenseBar({ expense }: { expense: any }) {
     console.log(error, success);
     if (error) return;
 
-    setEdit(false);
+    setConfirm(false);
+    setModification(null);
+  };
+
+  const modify = () => {
+    if (modification === "delete") return delete_();
+    if (modification === "edit") return edit_();
   };
   return (
     <div
       key={expense.id}
       className="w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-2 gap-2"
     >
-      {edit ? (
+      {confirm ? (
         <>
           <Input
             onChange={(e) =>
@@ -63,15 +78,16 @@ export default function ExpenseBar({ expense }: { expense: any }) {
       )}
 
       <div className="flex flex-row gap-2 ml-auto mr-0">
-        {edit ? (
+        {confirm ? (
           <>
-            <Button onClick={edit_} size={"icon"}>
+            <Button onClick={modify} size={"icon"}>
               <MdCheckCircle />
             </Button>
             <Button
               variant={"destructive"}
               onClick={() => {
-                setEdit(false);
+                setConfirm(false);
+                setModification(null);
               }}
               size={"icon"}
             >
@@ -82,14 +98,22 @@ export default function ExpenseBar({ expense }: { expense: any }) {
           <>
             <Button
               onClick={() => {
-                setEdit(true);
+                setModification("edit");
+                setConfirm(true);
               }}
               variant={"outline"}
               size={"icon"}
             >
               <FaPencilAlt />
             </Button>
-            <Button onClick={delete_} variant={"destructive"} size={"icon"}>
+            <Button
+              onClick={() => {
+                setModification("delete");
+                setConfirm(true);
+              }}
+              variant={"destructive"}
+              size={"icon"}
+            >
               <FaTrash />
             </Button>
           </>
