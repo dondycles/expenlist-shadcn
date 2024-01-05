@@ -25,7 +25,7 @@ const formSchema = z.object({
   }),
 });
 
-export function ExpenseForm() {
+export function ExpenseAddForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

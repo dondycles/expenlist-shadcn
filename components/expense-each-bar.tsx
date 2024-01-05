@@ -8,7 +8,7 @@ import { Input } from "./ui/input";
 import { editExpense } from "@/actions/expense/edit";
 import { usePhpPeso } from "@/lib/phpformatter";
 
-export default function ExpenseBar({ expense }: { expense: any }) {
+export default function ExpenseEachBar({ expense }: { expense: any }) {
   const [modification, setModification] = useState<"edit" | "delete" | null>(
     null
   );

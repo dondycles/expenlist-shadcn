@@ -15,7 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export default function ListBottomActionButtons({
+export default function ExpenseBottomActionButtons({
   children,
 }: {
   children: React.ReactNode;
@@ -24,7 +24,7 @@ export default function ListBottomActionButtons({
   const [date, setDate] = useState<Date>(new Date());
 
   useEffect(() => {
-    route.push("/lists?date=" + date.toDateString());
+    route.push("/expenses?date=" + date.toDateString());
   }, [date]);
 
   return (

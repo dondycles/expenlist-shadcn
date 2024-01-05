@@ -1,7 +1,7 @@
-import { ExpenseForm } from "@/components/expense-form";
-import ListBottomActionButtons from "@/components/list-bottom-action-buttons";
-import ListExpenses from "@/components/list-expenses";
-import ListTotal from "@/components/list-total";
+import { ExpenseAddForm } from "@/components/expense-add-form";
+import ExpenseBottomActionButtons from "@/components/expense-bottom-action-buttons";
+import ExpenseScrollable from "@/components/expense-scrollable";
+import ExpenseTotal from "@/components/expense-total";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function SkeletonDemo() {
@@ -42,11 +42,11 @@ export default function Lists({
           </div>
         }
       >
-        <ListExpenses date={searchParams.date} />
+        <ExpenseScrollable date={searchParams.date} />
       </Suspense>
-      <ListBottomActionButtons>
+      <ExpenseBottomActionButtons>
         <div className="flex flex-row gap-2">
-          <ListTotal />
+          <ExpenseTotal />
 
           <Popover>
             <PopoverTrigger asChild>
@@ -63,11 +63,11 @@ export default function Lists({
               </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-fit">
-              <ExpenseForm />
+              <ExpenseAddForm />
             </PopoverContent>
           </Popover>
         </div>
-      </ListBottomActionButtons>
+      </ExpenseBottomActionButtons>
     </main>
   );
 }

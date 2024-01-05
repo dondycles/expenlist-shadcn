@@ -1,12 +1,10 @@
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import ExpenseBar from "./expense-bar";
-import { Suspense } from "react";
-import { Skeleton } from "./ui/skeleton";
+import ExpenseEachBar from "./expense-each-bar";
 
 const supabase = createServerComponentClient({ cookies });
 
-export default async function ListExpenses({ date }: { date: string }) {
+export default async function ExpenseCrollable({ date }: { date: string }) {
   var _ = require("lodash");
   const { data, error } = await supabase
     .from("expenses")
@@ -16,7 +14,7 @@ export default async function ListExpenses({ date }: { date: string }) {
   return (
     <div className="flex flex-col h-full max-h-full gap-2 overflow-auto">
       {data?.map((expense) => {
-        return <ExpenseBar expense={expense} key={expense.id} />;
+        return <ExpenseEachBar expense={expense} key={expense.id} />;
       })}
     </div>
   );

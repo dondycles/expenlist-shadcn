@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 var _ = require("lodash");
 const supabase = createServerComponentClient({ cookies });
 
-export default async function ListTotal() {
+export default async function ExpenseTotal() {
   const date = new Date().toISOString();
   const { data, error } = await supabase
     .from("expenses")
