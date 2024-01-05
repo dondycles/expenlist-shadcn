@@ -2,21 +2,18 @@
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { FieldValues } from "react-hook-form";
 
-export const addExpense = async ({
+export const addSavings = async ({
   name,
-  cost,
+  amount,
 }: {
   name: string;
-  cost: string;
+  amount: string;
 }) => {
   const supabase = createServerActionClient({ cookies });
-  const date = new Date().toISOString();
-  console.log(date);
   const { error } = await supabase
-    .from("expenses")
-    .insert([{ cost: cost, name: name, date: date }]);
+    .from("savings")
+    .insert([{ amount: amount, name: name }]);
 
   if (error) return { error: error };
 

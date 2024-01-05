@@ -14,34 +14,30 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FaSpinner } from "react-icons/fa";
-import { addExpense } from "@/actions/expense/add";
-import { ExpenseDeductFromComboBox } from "./expense-deduct-from-combobox";
+import { addSavings } from "@/actions/save/add";
 
 const formSchema = z.object({
-  cost: z.string().min(1, {
+  amount: z.string().min(1, {
     message: "Please input the cost.",
   }),
   name: z.string().min(1, {
     message: "Please input the name.",
   }),
-  from: z.string().nullable(),
 });
 
-export function ExpenseAddForm() {
+export function SavingsAddForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      cost: "",
+      amount: "",
       name: "",
-      from: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { error, success } = await addExpense({
-      cost: values.cost,
+    const { error, success } = await addSavings({
+      amount: values.amount,
       name: values.name,
-      from: values.from,
     });
 
     console.log(error, success);
@@ -69,21 +65,15 @@ export function ExpenseAddForm() {
         />
         <FormField
           control={form.control}
-          name="cost"
+          name="amount"
           render={({ field }) => (
             <FormItem className="flex-1">
               <FormControl>
-                <Input type="number" placeholder="Cost" {...field} />
+                <Input type="number" placeholder="Amount" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
-        />
-
-        <ExpenseDeductFromComboBox
-          setId={(id) => {
-            form.setValue("from", id);
-          }}
         />
         <Button type="submit" className="text-white shadow ">
           {form.formState.isSubmitting ? (

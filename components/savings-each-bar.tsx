@@ -2,24 +2,24 @@
 import { FaPencilAlt, FaSpinner, FaTrash } from "react-icons/fa";
 import { MdCancel, MdCheckCircle } from "react-icons/md";
 import { Button } from "./ui/button";
-import { deleteExpense } from "@/actions/expense/delete";
 import { useState } from "react";
 import { Input } from "./ui/input";
-import { editExpense } from "@/actions/expense/edit";
+import { editSavings } from "@/actions/save/edit";
 import { usePhpPeso } from "@/lib/phpformatter";
+import { deleteSavings } from "@/actions/save/delete";
 
-export default function ExpenseEachBar({ expense }: { expense: any }) {
+export default function SavingsEachBar({ savings }: { savings: any }) {
   const [modification, setModification] = useState<"edit" | "delete" | null>(
     null
   );
   const [confirm, setConfirm] = useState(false);
   const [modifying, setModifying] = useState(false);
   const [editedValue, setEditedValue] = useState({
-    name: expense.name,
-    cost: expense.cost,
+    name: savings.name,
+    amount: savings.amount,
   });
   const delete_ = async () => {
-    const { error, success } = await deleteExpense(expense.id);
+    const { error, success } = await deleteSavings(savings.id);
     console.log(error, success);
 
     if (error) return { error };
@@ -27,18 +27,21 @@ export default function ExpenseEachBar({ expense }: { expense: any }) {
   };
   const edit_ = async () => {
     if (
-      editedValue.cost === expense.cost &&
-      editedValue.name === expense.name
+      editedValue.amount === savings.amount &&
+      editedValue.name === savings.name
     ) {
       setConfirm(false);
       setModification(null);
       return { success: "Nothing Changed." };
     }
 
-    const { error, success } = await editExpense({
-      cost: editedValue.cost === expense.cost ? expense.cost : editedValue.cost,
-      name: editedValue.name === expense.name ? expense.name : editedValue.name,
-      id: expense.id,
+    const { error, success } = await editSavings({
+      amount:
+        editedValue.amount === savings.amount
+          ? savings.amount
+          : editedValue.amount,
+      name: editedValue.name === savings.name ? savings.name : editedValue.name,
+      id: savings.id,
     });
 
     console.log(error, success);
@@ -63,7 +66,7 @@ export default function ExpenseEachBar({ expense }: { expense: any }) {
   };
   return (
     <div
-      key={expense.id}
+      key={savings.id}
       className="w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-2 gap-2"
     >
       {confirm ? (
@@ -76,17 +79,17 @@ export default function ExpenseEachBar({ expense }: { expense: any }) {
           />
           <Input
             onChange={(e) =>
-              setEditedValue({ ...editedValue, cost: e.target.value })
+              setEditedValue({ ...editedValue, amount: e.target.value })
             }
-            value={editedValue.cost}
+            value={editedValue.amount}
           />
         </>
       ) : (
         <>
           <p className="flex items-center p-2 font-semibold text-primary">
-            {expense.name}
+            {savings.name}
           </p>
-          <p className="flex items-center p-2 ">{usePhpPeso(expense.cost)}</p>
+          <p className="flex items-center p-2 ">{usePhpPeso(savings.amount)}</p>
         </>
       )}
 
