@@ -91,7 +91,7 @@ export default function ExpenseEachBar({ expense }: { expense: any }) {
       )}
 
       <div className="flex flex-row gap-2 ml-auto mr-0">
-        {!modifying ? (
+        {modifying ? (
           <div className="flex items-center justify-center w-10 h-10 text-2xl animate-spin">
             <FaSpinner />
           </div>
