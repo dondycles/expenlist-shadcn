@@ -24,7 +24,7 @@ export default function ListBottomActionButtons({
   const [date, setDate] = useState<Date>(new Date());
 
   useEffect(() => {
-    route.push("/lists?date=" + date.toLocaleDateString());
+    route.push("/lists?date=" + date.toDateString());
   }, [date]);
 
   return (
