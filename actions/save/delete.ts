@@ -10,7 +10,7 @@ export const deleteExpense = async (id: UUID) => {
 
   if (error) return { error: error };
 
-  revalidatePath("/expenses");
+  revalidatePath("/savings");
 
-  return { success: "Expense Deleted!" };
+  return { success: "Savings Deleted!" };
 };

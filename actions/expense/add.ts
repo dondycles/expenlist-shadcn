@@ -20,7 +20,7 @@ export const addExpense = async ({
 
   if (error) return { error: error };
 
-  revalidatePath("/lists");
+  revalidatePath("/expenses");
 
   return { success: "Expense Added!" };
 };

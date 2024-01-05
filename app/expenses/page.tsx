@@ -47,7 +47,6 @@ export default function Lists({
       <ExpenseBottomActionButtons>
         <div className="flex flex-row gap-2">
           <ExpenseTotal />
-
           <Popover>
             <PopoverTrigger asChild>
               <Button

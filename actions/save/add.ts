@@ -1,27 +1,26 @@
 "use server";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
-import { UUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { FieldValues } from "react-hook-form";
 
-export const editExpense = async ({
+export const addExpense = async ({
   name,
   cost,
-  id,
 }: {
   name: string;
   cost: string;
-  id: UUID;
 }) => {
   const supabase = createServerActionClient({ cookies });
+  const date = new Date().toISOString();
+  console.log(date);
   const { error } = await supabase
     .from("expenses")
-    .update({ name: name, cost: cost })
-    .eq("id", id);
+    .insert([{ cost: cost, name: name, date: date }]);
 
   if (error) return { error: error };
 
-  revalidatePath("/expenses");
+  revalidatePath("/savings");
 
-  return { success: "Expense Edited!" };
+  return { success: "Savings Added!" };
 };
