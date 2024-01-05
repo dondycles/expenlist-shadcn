@@ -1,5 +1,5 @@
 import { ExpenseForm } from "@/components/expense-form";
-import ListLists from "@/components/list-lists";
+import ListExpenses from "@/components/list-expenses";
 import { Button } from "@/components/ui/button";
 
 export default function Lists() {
@@ -8,7 +8,7 @@ export default function Lists() {
       <p className="px-4">
         List all of your expenses for today. {new Date().toDateString()}
       </p>
-      <ListLists />
+      <ListExpenses />
       <ExpenseForm />
       <div className="flex flex-row items-center gap-2 px-4">
         <Button size={"icon"}>Prev</Button>

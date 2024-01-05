@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FaSpinner } from "react-icons/fa";
-import { useState } from "react";
 import { addExpense } from "@/actions/expense/add";
 
 const formSchema = z.object({
@@ -41,6 +40,8 @@ export function ExpenseForm() {
       name: values.name,
     });
 
+    console.log(error, success);
+    if (error) return;
     form.reset();
   }
 
