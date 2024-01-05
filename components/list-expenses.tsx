@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import ExpenseBar from "./expense-bar";
+import { Suspense } from "react";
+import { Skeleton } from "./ui/skeleton";
 
 const supabase = createServerComponentClient({ cookies });
 

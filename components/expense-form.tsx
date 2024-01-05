@@ -76,8 +76,8 @@ export function ExpenseForm() {
           )}
         />
         <Button type="submit" className="text-white shadow ">
-          {form.formState.isSubmitting ? (
-            <div className=" animate-spin">
+          {!form.formState.isSubmitting ? (
+            <div className="text-2xl  animate-spin">
               <FaSpinner />
             </div>
           ) : (

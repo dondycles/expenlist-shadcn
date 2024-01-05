@@ -28,6 +28,7 @@ const formSchema = z.object({
 });
 
 export function AuthLogInForm() {
+  const [isSuccessful, setIsSuccessful] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,9 +40,11 @@ export function AuthLogInForm() {
   const route = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { error } = await logIn(values);
+    const { error, success } = await logIn(values);
+
     if (error) return console.log(error);
 
+    setIsSuccessful(true);
     route.replace("/");
   }
 
@@ -96,6 +99,8 @@ export function AuthLogInForm() {
             <div className=" animate-spin">
               <FaSpinner />
             </div>
+          ) : isSuccessful ? (
+            "Please wait..."
           ) : (
             "Log In"
           )}

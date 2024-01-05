@@ -54,6 +54,7 @@ export default function ListBottomActionButtons({
         </PopoverContent>
       </Popover>
       {children}
+      {/* Add Button and Total is in the List Page */}
     </div>
   );
 }

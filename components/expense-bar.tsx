@@ -1,5 +1,5 @@
 "use client";
-import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import { FaPencilAlt, FaSpinner, FaTrash } from "react-icons/fa";
 import { MdCancel, MdCheckCircle } from "react-icons/md";
 import { Button } from "./ui/button";
 import { deleteExpense } from "@/actions/expense/delete";
@@ -13,6 +13,7 @@ export default function ExpenseBar({ expense }: { expense: any }) {
     null
   );
   const [confirm, setConfirm] = useState(false);
+  const [modifying, setModifying] = useState(false);
   const [editedValue, setEditedValue] = useState({
     name: expense.name,
     cost: expense.cost,
@@ -20,6 +21,9 @@ export default function ExpenseBar({ expense }: { expense: any }) {
   const delete_ = async () => {
     const { error, success } = await deleteExpense(expense.id);
     console.log(error, success);
+
+    if (error) return { error };
+    return { success };
   };
   const edit_ = async () => {
     if (
@@ -28,7 +32,7 @@ export default function ExpenseBar({ expense }: { expense: any }) {
     ) {
       setConfirm(false);
       setModification(null);
-      return;
+      return { success: "Nothing Changed." };
     }
 
     const { error, success } = await editExpense({
@@ -38,15 +42,24 @@ export default function ExpenseBar({ expense }: { expense: any }) {
     });
 
     console.log(error, success);
-    if (error) return;
+    if (error) return { error };
 
     setConfirm(false);
     setModification(null);
+
+    return { success };
   };
 
-  const modify = () => {
-    if (modification === "delete") return delete_();
-    if (modification === "edit") return edit_();
+  const modify = async () => {
+    setModifying(true);
+    if (modification === "delete") {
+      const { error, success } = await delete_();
+      if (error) setModifying(false);
+    }
+    if (modification === "edit") {
+      const { error, success } = await edit_();
+      if (error) setModifying(false);
+    }
   };
   return (
     <div
@@ -78,7 +91,11 @@ export default function ExpenseBar({ expense }: { expense: any }) {
       )}
 
       <div className="flex flex-row gap-2 ml-auto mr-0">
-        {confirm ? (
+        {modifying ? (
+          <div className="flex items-center justify-center h-full text-3xl animate-spin w-fit">
+            <FaSpinner />
+          </div>
+        ) : confirm ? (
           <>
             <Button onClick={modify} size={"icon"}>
               <MdCheckCircle />

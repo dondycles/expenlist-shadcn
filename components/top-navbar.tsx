@@ -16,7 +16,7 @@ export default async function TopNavBar() {
   return (
     <nav className="flex flex-row items-center justify-between py-4 text-primary-foreground bg-primary px-4 md:px-32 lg:px-64 xl:px-[512px]">
       <Link href={"/"} className="text-xl font-extrabold">
-        Expenlist.
+        ExpenSave.
       </Link>
       <div className="flex flex-row items-center justify-center gap-2">
         <ModeToggle />
