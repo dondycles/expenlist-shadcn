@@ -47,12 +47,15 @@ export function ExpenseForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="px-4 space-y-2">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-row w-full gap-2"
+      >
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex-1">
               <FormControl>
                 <Input placeholder="Name" {...field} />
               </FormControl>
@@ -64,16 +67,15 @@ export function ExpenseForm() {
           control={form.control}
           name="cost"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex-1">
               <FormControl>
-                <Input placeholder="Cost" {...field} />
+                <Input type="number" placeholder="Cost" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
-        <Button type="submit" className="w-full text-white shadow">
+        <Button type="submit" className="text-white shadow ">
           {form.formState.isSubmitting ? (
             <div className=" animate-spin">
               <FaSpinner />

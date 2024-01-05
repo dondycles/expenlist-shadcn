@@ -1,19 +1,32 @@
 import { ExpenseForm } from "@/components/expense-form";
+import ListBottomActionButtons from "@/components/list-bottom-action-buttons";
 import ListExpenses from "@/components/list-expenses";
-import { Button } from "@/components/ui/button";
+import ListTotal from "@/components/list-total";
 
-export default function Lists() {
+export default function Lists({
+  searchParams,
+}: {
+  searchParams: { date: string };
+}) {
+  const currentDate = new Date();
   return (
-    <main className="flex flex-col w-full h-full max-h-full gap-2 py-4 overflow-auto">
-      <p className="px-4">
-        List all of your expenses for today. {new Date().toDateString()}
+    <main className="flex flex-col w-full h-full max-h-full gap-2 py-4 overflow-auto  px-4 md:px-32 lg:px-64 xl:px-[512px]">
+      <p className="">
+        List all of your expenses for today.{" "}
+        {searchParams.date
+          ? new Date(searchParams.date).toLocaleDateString()
+          : new Date().toLocaleDateString()}{" "}
       </p>
-      <ListExpenses />
-      <ExpenseForm />
-      <div className="flex flex-row items-center gap-2 px-4">
-        <Button size={"icon"}>Prev</Button>
-        <p>Total Expenses today: 999</p>
-      </div>
+
+      <ListExpenses date={searchParams.date} />
+      {currentDate
+        .toLocaleDateString()
+        .match(new Date(searchParams.date).toLocaleDateString()) && (
+        <ExpenseForm />
+      )}
+      <ListBottomActionButtons>
+        <ListTotal />
+      </ListBottomActionButtons>
     </main>
   );
 }
