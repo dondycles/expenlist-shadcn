@@ -27,7 +27,7 @@ const formSchema = z.object({
   name: z.string().min(1, {
     message: "Please input the name.",
   }),
-  from: z.string().nullable(),
+  savings_id: z.string(),
 });
 
 export function ExpenseAddForm() {
@@ -36,28 +36,29 @@ export function ExpenseAddForm() {
     defaultValues: {
       cost: "",
       name: "",
-      from: "",
+      savings_id: "",
     },
   });
 
   const [costToDeduct, setCostToDeduct] = useState(0);
   const [savingsData, setSavingsData] = useState<any[any]>();
+  const [noSavings, setNoSavings] = useState(false);
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { error, success } = await addExpense({
       cost: values.cost,
       name: values.name,
-      from: savingsData.id,
+      deduct_to: values.savings_id,
     });
 
     console.log(error, success);
-    if (error) return;
 
-    if (!savingsData) return form.reset();
-    await editSavings({
-      id: values.from as UUID,
+    const savings = await editSavings({
+      id: values.savings_id as UUID,
       amount: String(Number(savingsData.amount) - Number(values.cost)),
       name: savingsData.name,
     });
+
+    console.log(savings.error, savings.success);
 
     form.reset();
   }
@@ -68,51 +69,63 @@ export function ExpenseAddForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col w-full gap-2"
       >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem className="flex-1">
-              <FormControl>
-                <Input placeholder="Name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="cost"
-          render={({ field }) => (
-            <FormItem className="flex-1">
-              <FormControl>
-                <Input type="number" placeholder="Cost" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {!noSavings && (
+          <>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormControl>
+                    <Input placeholder="Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <ExpenseDeductFromComboBox
-          cost={costToDeduct}
-          setId={(id) => {
-            form.setValue("from", id);
-          }}
-          getCost={() => {
-            setCostToDeduct(Number(form.getValues("cost")));
-          }}
-          setSavingsData={(savings) => {
-            setSavingsData(savings);
-            form.setValue("from", savings.id);
-          }}
-        />
-        <Button type="submit" className="text-white shadow ">
+            <FormField
+              control={form.control}
+              name="cost"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormControl>
+                    <Input type="number" placeholder="Cost" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <ExpenseDeductFromComboBox
+              cost={costToDeduct}
+              getCost={() => {
+                setCostToDeduct(Number(form.getValues("cost")));
+              }}
+              setSavingsData={(savings) => {
+                setSavingsData(savings);
+                form.setValue("savings_id", savings.id);
+              }}
+              setNoSavings={(isTrue) => {
+                setNoSavings(isTrue);
+              }}
+            />
+          </>
+        )}
+        <Button
+          disabled={noSavings}
+          type="submit"
+          variant={noSavings ? "destructive" : "default"}
+          className={`text-white shadow `}
+        >
           {form.formState.isSubmitting ? (
             <div className="text-2xl animate-spin">
               <FaSpinner />
             </div>
+          ) : noSavings ? (
+            "No Savings to spend..."
           ) : (
-            "ADD"
+            "Add"
           )}
         </Button>
       </form>

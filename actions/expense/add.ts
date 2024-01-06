@@ -7,17 +7,17 @@ import { FieldValues } from "react-hook-form";
 export const addExpense = async ({
   name,
   cost,
-  from,
+  deduct_to,
 }: {
   name: string;
   cost: string;
-  from: string | null;
+  deduct_to: string | null;
 }) => {
   const supabase = createServerActionClient({ cookies });
   const date = new Date().toDateString();
   const { error } = await supabase
     .from("expenses")
-    .insert([{ cost: cost, name: name, date: date, deduct_to: from }]);
+    .insert([{ cost: cost, name: name, date: date, deduct_to: deduct_to }]);
 
   if (error) return { error: error };
 

@@ -21,15 +21,15 @@ import { getNames } from "@/actions/save/getNames";
 import { usePhpPeso } from "@/lib/phpformatter";
 
 export function ExpenseDeductFromComboBox({
-  setId,
   cost,
   getCost,
   setSavingsData,
+  setNoSavings,
 }: {
-  setId: (id: string | null) => void;
   cost: number;
   getCost: () => void;
   setSavingsData: (savings: any[any]) => void;
+  setNoSavings: (isTrue: boolean) => void;
 }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -40,6 +40,8 @@ export function ExpenseDeductFromComboBox({
     const { data, error } = await getNames();
     if (error) return;
     setNames(data);
+    if (data.length === 0) return setNoSavings(true);
+    setNoSavings(false);
   };
 
   useEffect(() => {
@@ -76,7 +78,6 @@ export function ExpenseDeductFromComboBox({
                 value={namee.name}
                 onSelect={(currentValue) => {
                   setValue(currentValue === value ? "" : currentValue);
-                  setId(currentValue === value ? null : namee.id);
                   setSavingsData(currentValue === value ? null : namee);
                   setOpen(false);
                 }}

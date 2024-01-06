@@ -81,7 +81,7 @@ export function SavingsAddForm() {
               <FaSpinner />
             </div>
           ) : (
-            "ADD"
+            "Add"
           )}
         </Button>
       </form>
