@@ -8,7 +8,7 @@ export default async function SavingsScrollable() {
   var _ = require("lodash");
   const { data, error } = await supabase
     .from("savings")
-    .select("*")
+    .select("*,expenses(*)")
     .order("created_at", { ascending: true });
   return (
     <div className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto ">

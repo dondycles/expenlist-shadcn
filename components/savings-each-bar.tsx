@@ -57,10 +57,12 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
     setModifying(true);
     if (modification === "delete") {
       const { error, success } = await delete_();
+      console.log(error, success);
       if (error) setModifying(false);
     }
     if (modification === "edit") {
       const { error, success } = await edit_();
+      console.log(error, success);
       setModifying(false);
     }
   };
@@ -92,7 +94,6 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
           <p className="flex items-center p-2 ">{usePhpPeso(savings.amount)}</p>
         </>
       )}
-
       <div className="flex flex-row gap-2 ml-auto mr-0">
         {modifying ? (
           <div className="flex items-center justify-center w-10 h-10 text-2xl animate-spin">
@@ -139,6 +140,9 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
           </>
         )}
       </div>
+      {savings.expenses.map((expense: any[any]) => {
+        return <p>{expense.name}</p>;
+      })}
     </div>
   );
 }

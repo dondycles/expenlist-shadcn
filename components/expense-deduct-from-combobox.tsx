@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/popover";
 import { getNames } from "@/actions/save/getNames";
 import { usePhpPeso } from "@/lib/phpformatter";
+import { CommandLoading } from "cmdk";
 
 export function ExpenseDeductFromComboBox({
   cost,
@@ -34,12 +35,12 @@ export function ExpenseDeductFromComboBox({
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
-  const [names, setNames] = useState<any[any]>([]);
+  const [savings, setSavings] = useState<any[any]>([]);
 
   const getNamesFromSavings = async () => {
     const { data, error } = await getNames();
     if (error) return;
-    setNames(data);
+    setSavings(data);
     if (data.length === 0) return setNoSavings(true);
     setNoSavings(false);
   };
@@ -72,30 +73,49 @@ export function ExpenseDeductFromComboBox({
           <CommandInput placeholder="Search from savings..." />
           <CommandEmpty>No Savings found.</CommandEmpty>
           <CommandGroup>
-            {names.map((namee: any) => (
+            {savings.map((saving: any) => (
               <CommandItem
-                key={namee.id}
-                value={namee.name}
+                key={saving.id}
+                value={saving.name}
                 onSelect={(currentValue) => {
                   setValue(currentValue === value ? "" : currentValue);
-                  setSavingsData(currentValue === value ? null : namee);
+                  setSavingsData(currentValue === value ? null : saving);
                   setOpen(false);
                 }}
                 className={`${
-                  Number(namee.amount) - Number(cost) < 0 && "bg-destructive"
-                } mb-1`}
-                disabled={Number(namee.amount) - Number(cost) < 0}
+                  Number(saving.amount) - Number(cost) < 0 && "bg-destructive"
+                } mb-1 last:mb-0`}
+                disabled={Number(saving.amount) - Number(cost) < 0}
               >
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === namee.name ? "opacity-100" : "opacity-0"
+                    value.toLowerCase() === saving.name.toLowerCase()
+                      ? "opacity-100"
+                      : "opacity-0"
                   )}
                 />
-                {namee.name} : {usePhpPeso(namee.amount)} - {Number(cost)} ={" "}
-                {usePhpPeso(Number(namee.amount) - Number(cost))}
+                {saving.name} : {usePhpPeso(saving.amount)} - {Number(cost)} ={" "}
+                {usePhpPeso(Number(saving.amount) - Number(cost))}
               </CommandItem>
             ))}
+            <CommandItem
+              onSelect={() => {
+                setValue("Do not deduct");
+                setSavingsData(null);
+                setOpen(false);
+              }}
+              key={"none"}
+              value="None"
+            >
+              <Check
+                className={cn(
+                  "mr-2 h-4 w-4",
+                  value === "Do not deduct" ? "opacity-100" : "opacity-0"
+                )}
+              />
+              Do not deduct
+            </CommandItem>
           </CommandGroup>
         </Command>
       </PopoverContent>

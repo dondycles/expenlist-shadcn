@@ -27,7 +27,7 @@ const formSchema = z.object({
   name: z.string().min(1, {
     message: "Please input the name.",
   }),
-  savings_id: z.string(),
+  savings_id: z.string().nullable(),
 });
 
 export function ExpenseAddForm() {
@@ -36,7 +36,7 @@ export function ExpenseAddForm() {
     defaultValues: {
       cost: "",
       name: "",
-      savings_id: "",
+      savings_id: null,
     },
   });
 
@@ -51,6 +51,8 @@ export function ExpenseAddForm() {
     });
 
     console.log(error, success);
+
+    if (!savingsData) return form.reset();
 
     const savings = await editSavings({
       id: values.savings_id as UUID,
@@ -104,7 +106,7 @@ export function ExpenseAddForm() {
               }}
               setSavingsData={(savings) => {
                 setSavingsData(savings);
-                form.setValue("savings_id", savings.id);
+                form.setValue("savings_id", savings ? savings.id : null);
               }}
               setNoSavings={(isTrue) => {
                 setNoSavings(isTrue);
