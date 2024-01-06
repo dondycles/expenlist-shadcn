@@ -16,6 +16,9 @@ import { Input } from "@/components/ui/input";
 import { FaSpinner } from "react-icons/fa";
 import { addExpense } from "@/actions/expense/add";
 import { ExpenseDeductFromComboBox } from "./expense-deduct-from-combobox";
+import { useEffect, useState } from "react";
+import { editSavings } from "@/actions/save/edit";
+import { UUID } from "crypto";
 
 const formSchema = z.object({
   cost: z.string().min(1, {
@@ -37,15 +40,25 @@ export function ExpenseAddForm() {
     },
   });
 
+  const [costToDeduct, setCostToDeduct] = useState(0);
+  const [savingsData, setSavingsData] = useState<any[any]>();
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { error, success } = await addExpense({
       cost: values.cost,
       name: values.name,
-      from: values.from,
+      from: savingsData.id,
     });
 
     console.log(error, success);
     if (error) return;
+
+    if (!savingsData) return form.reset();
+    await editSavings({
+      id: values.from as UUID,
+      amount: String(Number(savingsData.amount) - Number(values.cost)),
+      name: savingsData.name,
+    });
+
     form.reset();
   }
 
@@ -81,8 +94,16 @@ export function ExpenseAddForm() {
         />
 
         <ExpenseDeductFromComboBox
+          cost={costToDeduct}
           setId={(id) => {
             form.setValue("from", id);
+          }}
+          getCost={() => {
+            setCostToDeduct(Number(form.getValues("cost")));
+          }}
+          setSavingsData={(savings) => {
+            setSavingsData(savings);
+            form.setValue("from", savings.id);
           }}
         />
         <Button type="submit" className="text-white shadow ">

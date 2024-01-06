@@ -15,10 +15,9 @@ export const addExpense = async ({
 }) => {
   const supabase = createServerActionClient({ cookies });
   const date = new Date().toDateString();
-  console.log(date);
   const { error } = await supabase
     .from("expenses")
-    .insert([{ cost: cost, name: name, date: date, deduct_from: from }]);
+    .insert([{ cost: cost, name: name, date: date, deduct_to: from }]);
 
   if (error) return { error: error };
 

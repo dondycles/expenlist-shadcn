@@ -20,33 +20,16 @@ import {
 import { getNames } from "@/actions/save/getNames";
 import { usePhpPeso } from "@/lib/phpformatter";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
-
 export function ExpenseDeductFromComboBox({
   setId,
+  cost,
+  getCost,
+  setSavingsData,
 }: {
   setId: (id: string | null) => void;
+  cost: number;
+  getCost: () => void;
+  setSavingsData: (savings: any[any]) => void;
 }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -64,7 +47,13 @@ export function ExpenseDeductFromComboBox({
   }, []);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover
+      open={open}
+      onOpenChange={() => {
+        setOpen((prev) => !prev);
+        getCost();
+      }}
+    >
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -72,14 +61,14 @@ export function ExpenseDeductFromComboBox({
           aria-expanded={open}
           className="w-[300px] justify-between"
         >
-          {value ? value : "Deduct to a savings (Optional)"}
+          {value ? value : "Deduct to a savings"}
           <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
         <Command>
           <CommandInput placeholder="Search from savings..." />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandEmpty>No Savings found.</CommandEmpty>
           <CommandGroup>
             {names.map((namee: any) => (
               <CommandItem
@@ -88,8 +77,13 @@ export function ExpenseDeductFromComboBox({
                 onSelect={(currentValue) => {
                   setValue(currentValue === value ? "" : currentValue);
                   setId(currentValue === value ? null : namee.id);
+                  setSavingsData(currentValue === value ? null : namee);
                   setOpen(false);
                 }}
+                className={`${
+                  Number(namee.amount) - Number(cost) < 0 && "bg-destructive"
+                } mb-1`}
+                disabled={Number(namee.amount) - Number(cost) < 0}
               >
                 <Check
                   className={cn(
@@ -97,7 +91,8 @@ export function ExpenseDeductFromComboBox({
                     value === namee.name ? "opacity-100" : "opacity-0"
                   )}
                 />
-                {namee.name} - {usePhpPeso(namee.amount)}
+                {namee.name} : {usePhpPeso(namee.amount)} - {Number(cost)} ={" "}
+                {usePhpPeso(Number(namee.amount) - Number(cost))}
               </CommandItem>
             ))}
           </CommandGroup>
