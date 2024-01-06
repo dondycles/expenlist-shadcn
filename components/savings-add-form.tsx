@@ -49,7 +49,7 @@ export function SavingsAddForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-2"
+        className="flex flex-col w-full gap-2 "
       >
         <FormField
           control={form.control}

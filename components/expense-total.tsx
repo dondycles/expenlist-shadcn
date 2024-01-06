@@ -17,7 +17,7 @@ export default async function ExpenseTotal() {
 
   return (
     <div className="flex flex-row items-center gap-2">
-      <p>{usePhpPeso(total)}</p>
+      <p className="text-primary-foreground">{usePhpPeso(total)}</p>
     </div>
   );
 }

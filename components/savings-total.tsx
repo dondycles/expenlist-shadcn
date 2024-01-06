@@ -14,7 +14,7 @@ export default async function SavingsTotal() {
 
   return (
     <div className="flex flex-row items-center flex-1 gap-2">
-      <p>{usePhpPeso(total)}</p>
+      <p className="text-primary-foreground">{usePhpPeso(total)}</p>
     </div>
   );
 }
