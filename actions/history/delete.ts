@@ -4,17 +4,13 @@ import { UUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-export const deleteSavings = async (id: UUID) => {
+export const deleteExpense = async (id: UUID) => {
   const supabase = createServerActionClient({ cookies });
-  const { error, data } = await supabase
-    .from("savings")
-    .delete()
-    .eq("id", id)
-    .select()
-    .single();
+  const { error } = await supabase.from("expenses").delete().eq("id", id);
 
   if (error) return { error: error };
-  revalidatePath("/savings");
 
-  return { success: data };
+  revalidatePath("/expenses");
+
+  return { success: "Expense Deleted!" };
 };

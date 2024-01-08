@@ -1,139 +1,71 @@
 "use client";
-import { FaPencilAlt, FaSpinner, FaTrash } from "react-icons/fa";
-import { MdCancel, MdCheckCircle } from "react-icons/md";
+import { FaSpinner, FaTrash } from "react-icons/fa";
 import { Button } from "./ui/button";
 import { deleteExpense } from "@/actions/expense/delete";
 import { useState } from "react";
-import { Input } from "./ui/input";
-import { editExpense } from "@/actions/expense/edit";
 import { usePhpPeso } from "@/lib/phpformatter";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 export default function ExpenseEachBar({ expense }: { expense: any }) {
-  const [modification, setModification] = useState<"edit" | "delete" | null>(
-    null
-  );
-  const [confirm, setConfirm] = useState(false);
   const [modifying, setModifying] = useState(false);
-  const [editedValue, setEditedValue] = useState({
-    name: expense.name,
-    cost: expense.cost,
-  });
+
   const delete_ = async () => {
-    const { error, success } = await deleteExpense(expense.id);
-    console.log(error, success);
-
-    if (error) return { error };
-    return { success };
-  };
-  const edit_ = async () => {
-    if (
-      editedValue.cost === expense.cost &&
-      editedValue.name === expense.name
-    ) {
-      setConfirm(false);
-      setModification(null);
-      return { success: "Nothing Changed." };
-    }
-
-    const { error, success } = await editExpense({
-      cost: editedValue.cost === expense.cost ? expense.cost : editedValue.cost,
-      name: editedValue.name === expense.name ? expense.name : editedValue.name,
-      id: expense.id,
-    });
-
-    console.log(error, success);
-    if (error) return { error };
-
-    setConfirm(false);
-    setModification(null);
-
-    return { success };
-  };
-
-  const modify = async () => {
     setModifying(true);
-    if (modification === "delete") {
-      const { error, success } = await delete_();
-      if (error) setModifying(false);
-    }
-    if (modification === "edit") {
-      const { error, success } = await edit_();
-      setModifying(false);
-    }
+    const deleteE = await deleteExpense(expense.id);
+    console.log(deleteE.error, deleteE.success);
   };
+
   return (
     <div
       key={expense.id}
       className="w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-2 gap-2"
     >
-      {confirm ? (
-        <>
-          <Input
-            onChange={(e) =>
-              setEditedValue({ ...editedValue, name: e.target.value })
-            }
-            value={editedValue.name}
-          />
-          <Input
-            onChange={(e) =>
-              setEditedValue({ ...editedValue, cost: e.target.value })
-            }
-            value={editedValue.cost}
-          />
-        </>
-      ) : (
-        <>
-          <p className="flex items-center p-2 font-semibold text-primary">
-            {expense.name}
-          </p>
-          <p className="flex items-center p-2 ">{usePhpPeso(expense.cost)}</p>
-        </>
-      )}
+      <p className="flex items-center p-2 font-semibold text-primary">
+        {expense.name}
+      </p>
+      <p className="flex items-center p-2 ">{usePhpPeso(expense.cost)}</p>
 
       <div className="flex flex-row gap-2 ml-auto mr-0">
         {modifying ? (
           <div className="flex items-center justify-center w-10 h-10 text-2xl animate-spin">
             <FaSpinner />
           </div>
-        ) : confirm ? (
-          <>
-            <Button onClick={modify} size={"icon"}>
-              <MdCheckCircle />
-            </Button>
-            <Button
-              variant={"destructive"}
-              onClick={() => {
-                setConfirm(false);
-                setModification(null);
-              }}
-              size={"icon"}
-            >
-              <MdCancel />
-            </Button>
-          </>
         ) : (
-          <>
-            <Button
-              onClick={() => {
-                setModification("edit");
-                setConfirm(true);
-              }}
-              variant={"outline"}
-              size={"icon"}
-            >
-              <FaPencilAlt />
-            </Button>
-            <Button
-              onClick={() => {
-                setModification("delete");
-                setConfirm(true);
-              }}
-              variant={"destructive"}
-              size={"icon"}
-            >
-              <FaTrash />
-            </Button>
-          </>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant={"destructive"} size={"icon"}>
+                <FaTrash />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Delete?</DialogTitle>
+                <DialogDescription>
+                  Deleting can't roll back last savings total and can't be
+                  undone.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose>
+                  <Button variant={"destructive"} onClick={() => delete_()}>
+                    Confirm
+                  </Button>
+                </DialogClose>
+                <DialogClose>
+                  <Button variant={"outline"}>Cancel</Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         )}
       </div>
     </div>

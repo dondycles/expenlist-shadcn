@@ -16,9 +16,10 @@ import { Input } from "@/components/ui/input";
 import { FaSpinner } from "react-icons/fa";
 import { addExpense } from "@/actions/expense/add";
 import { ExpenseDeductFromComboBox } from "./expense-deduct-from-combobox";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { editSavings } from "@/actions/save/edit";
 import { UUID } from "crypto";
+import { addHistory } from "@/actions/history/add";
 
 const formSchema = z.object({
   cost: z.string().min(1, {
@@ -42,25 +43,62 @@ export function ExpenseAddForm() {
 
   const [costToDeduct, setCostToDeduct] = useState(0);
   const [savingsData, setSavingsData] = useState<any[any]>();
-  const [noSavings, setNoSavings] = useState(false);
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (savingsData) {
+      const expense = await addExpense({
+        cost: values.cost,
+        name: values.name,
+        savings_data: savingsData,
+      });
+
+      console.log("addExpense", expense.error, expense.success);
+
+      const savings = await editSavings({
+        id: values.savings_id as UUID,
+        amount: String(Number(savingsData.amount) - Number(values.cost)),
+        name: savingsData.name,
+      });
+
+      console.log("editSavings", savings.error, savings.success);
+
+      const history = await addHistory({
+        expense_data: expense.success,
+        savings_data: savings.success,
+        is_edit: false,
+        is_expense: true,
+        is_deleted: false,
+      });
+
+      console.log("addHistory", history.error, history.success);
+
+      setCostToDeduct(0);
+      setSavingsData(null);
+
+      form.reset();
+
+      return;
+    }
+
     const { error, success } = await addExpense({
       cost: values.cost,
       name: values.name,
-      deduct_to: values.savings_id,
+      savings_data: savingsData,
     });
 
-    console.log(error, success);
+    console.log("addExpense", error, success);
 
-    if (!savingsData) return form.reset();
-
-    const savings = await editSavings({
-      id: values.savings_id as UUID,
-      amount: String(Number(savingsData.amount) - Number(values.cost)),
-      name: savingsData.name,
+    const history = await addHistory({
+      expense_data: success,
+      savings_data: null,
+      is_edit: false,
+      is_expense: true,
+      is_deleted: null,
     });
 
-    console.log(savings.error, savings.success);
+    console.log("addHistory", history.error, history.success);
+
+    setCostToDeduct(0);
+    setSavingsData(null);
 
     form.reset();
   }
@@ -71,61 +109,51 @@ export function ExpenseAddForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col w-full gap-2"
       >
-        {!noSavings && (
-          <>
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormControl>
-                    <Input placeholder="Name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormControl>
+                <Input placeholder="Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <FormField
-              control={form.control}
-              name="cost"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormControl>
-                    <Input type="number" placeholder="Cost" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <FormField
+          control={form.control}
+          name="cost"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormControl>
+                <Input type="number" placeholder="Cost" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <ExpenseDeductFromComboBox
-              cost={costToDeduct}
-              getCost={() => {
-                setCostToDeduct(Number(form.getValues("cost")));
-              }}
-              setSavingsData={(savings) => {
-                setSavingsData(savings);
-                form.setValue("savings_id", savings ? savings.id : null);
-              }}
-              setNoSavings={(isTrue) => {
-                setNoSavings(isTrue);
-              }}
-            />
-          </>
-        )}
+        <ExpenseDeductFromComboBox
+          cost={costToDeduct}
+          getCost={() => {
+            setCostToDeduct(Number(form.getValues("cost")));
+          }}
+          setSavingsData={(savings) => {
+            setSavingsData(savings);
+            form.setValue("savings_id", savings ? savings.id : null);
+          }}
+        />
         <Button
-          disabled={noSavings}
           type="submit"
-          variant={noSavings ? "destructive" : "default"}
+          variant={"default"}
           className={`text-white shadow `}
         >
           {form.formState.isSubmitting ? (
             <div className="text-2xl animate-spin">
               <FaSpinner />
             </div>
-          ) : noSavings ? (
-            "No Savings to spend..."
           ) : (
             "Add"
           )}

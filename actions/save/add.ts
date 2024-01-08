@@ -11,13 +11,15 @@ export const addSavings = async ({
   amount: string;
 }) => {
   const supabase = createServerActionClient({ cookies });
-  const { error } = await supabase
+  const { error, data } = await supabase
     .from("savings")
-    .insert([{ amount: amount, name: name }]);
+    .insert([{ amount: amount, name: name }])
+    .select()
+    .single();
 
   if (error) return { error: error };
 
   revalidatePath("/savings");
 
-  return { success: "Savings Added!" };
+  return { success: data };
 };

@@ -14,14 +14,16 @@ export const editSavings = async ({
   id: UUID;
 }) => {
   const supabase = createServerActionClient({ cookies });
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("savings")
     .update({ name: name, amount: amount })
-    .eq("id", id);
+    .eq("id", id)
+    .select()
+    .single();
 
   if (error) return { error: error };
 
   revalidatePath("/savings");
 
-  return { success: "Savings Edited!" };
+  return { success: data };
 };

@@ -2,7 +2,7 @@
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-export const getNames = async () => {
+export const getSavings = async () => {
   const supabase = createServerActionClient({ cookies });
   const { error, data } = await supabase.from("savings").select("*");
 

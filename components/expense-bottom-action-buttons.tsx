@@ -57,7 +57,7 @@ export default function ExpenseBottomActionButtons({
         </PopoverContent>
       </Popover>
 
-      <div className="flex flex-row items-center justify-between flex-1 gap-2 pl-2 rounded-md bg-primary">
+      <div className="flex flex-row items-center justify-between flex-1 gap-2 pl-2 rounded-md ">
         {children}
         <Popover>
           <PopoverTrigger asChild>

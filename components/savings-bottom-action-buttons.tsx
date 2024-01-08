@@ -10,7 +10,7 @@ export default function SavingsBottomActionButtons({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-row gap-3 pl-2 rounded-md bg-primary">
+    <div className="flex flex-row gap-2 pl-2 rounded-md">
       {children}
       <Popover>
         <PopoverTrigger asChild>

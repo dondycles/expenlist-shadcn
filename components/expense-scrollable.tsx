@@ -8,7 +8,7 @@ export default async function ExpenseCrollable({ date }: { date: string }) {
   var _ = require("lodash");
   const { data, error } = await supabase
     .from("expenses")
-    .select("*")
+    .select("* , savings(*)")
     .eq("date", date ? date : new Date().toDateString())
     .order("created_at", { ascending: true });
   return (

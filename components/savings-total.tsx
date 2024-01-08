@@ -1,16 +1,18 @@
+"use client";
+import { getTotal } from "@/actions/getTotal";
 import { usePhpPeso } from "@/lib/phpformatter";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { useEffect, useState } from "react";
+import { useTotal } from "@/store";
 var _ = require("lodash");
-const supabase = createServerComponentClient({ cookies });
 
-export default async function SavingsTotal() {
-  const date = new Date().toISOString();
-  const { data, error } = await supabase.from("savings").select("amount");
+export const revalidate = 0;
 
-  const total = _.sum(
-    data?.map((expense: { amount: any }) => Number(expense.amount))
-  );
+export default function SavingsTotal({ total }: { total: number }) {
+  const setTtotal = useTotal().setTotal;
+
+  useEffect(() => {
+    setTtotal(Number(total));
+  }, []);
 
   return (
     <div className="flex flex-row items-center flex-1 gap-2">

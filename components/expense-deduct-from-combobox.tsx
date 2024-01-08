@@ -17,20 +17,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { getNames } from "@/actions/save/getNames";
+import { getSavings } from "@/actions/save/get";
 import { usePhpPeso } from "@/lib/phpformatter";
-import { CommandLoading } from "cmdk";
 
 export function ExpenseDeductFromComboBox({
   cost,
   getCost,
   setSavingsData,
-  setNoSavings,
 }: {
   cost: number;
   getCost: () => void;
   setSavingsData: (savings: any[any]) => void;
-  setNoSavings: (isTrue: boolean) => void;
 }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -38,11 +35,9 @@ export function ExpenseDeductFromComboBox({
   const [savings, setSavings] = useState<any[any]>([]);
 
   const getNamesFromSavings = async () => {
-    const { data, error } = await getNames();
+    const { data, error } = await getSavings();
     if (error) return;
     setSavings(data);
-    if (data.length === 0) return setNoSavings(true);
-    setNoSavings(false);
   };
 
   useEffect(() => {

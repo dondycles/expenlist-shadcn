@@ -7,31 +7,50 @@ import { Input } from "./ui/input";
 import { editSavings } from "@/actions/save/edit";
 import { usePhpPeso } from "@/lib/phpformatter";
 import { deleteSavings } from "@/actions/save/delete";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { addHistory } from "@/actions/history/add";
 
 export default function SavingsEachBar({ savings }: { savings: any }) {
-  const [modification, setModification] = useState<"edit" | "delete" | null>(
-    null
-  );
   const [confirm, setConfirm] = useState(false);
   const [modifying, setModifying] = useState(false);
   const [editedValue, setEditedValue] = useState({
     name: savings.name,
     amount: savings.amount,
   });
-  const delete_ = async () => {
-    const { error, success } = await deleteSavings(savings.id);
-    console.log(error, success);
 
-    if (error) return { error };
-    return { success };
+  const delete_ = async () => {
+    setModifying(true);
+    const deleteS = await deleteSavings(savings.id);
+    console.log(deleteS.error, deleteS.success);
+
+    const history = await addHistory({
+      expense_data: null,
+      savings_data: deleteS.success,
+      is_edit: false,
+      is_expense: false,
+      is_deleted: true,
+    });
+
+    console.log(history.error, history.success);
   };
+
   const edit_ = async () => {
+    setModifying(true);
+
     if (
       editedValue.amount === savings.amount &&
       editedValue.name === savings.name
     ) {
       setConfirm(false);
-      setModification(null);
       return { success: "Nothing Changed." };
     }
 
@@ -45,27 +64,14 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
     });
 
     console.log(error, success);
+
     if (error) return { error };
 
     setConfirm(false);
-    setModification(null);
-
+    setModifying(false);
     return { success };
   };
 
-  const modify = async () => {
-    setModifying(true);
-    if (modification === "delete") {
-      const { error, success } = await delete_();
-      console.log(error, success);
-      if (error) setModifying(false);
-    }
-    if (modification === "edit") {
-      const { error, success } = await edit_();
-      console.log(error, success);
-      setModifying(false);
-    }
-  };
   return (
     <div
       key={savings.id}
@@ -101,14 +107,13 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
           </div>
         ) : confirm ? (
           <>
-            <Button onClick={modify} size={"icon"}>
+            <Button onClick={edit_} size={"icon"}>
               <MdCheckCircle />
             </Button>
             <Button
               variant={"destructive"}
               onClick={() => {
                 setConfirm(false);
-                setModification(null);
               }}
               size={"icon"}
             >
@@ -119,7 +124,6 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
           <>
             <Button
               onClick={() => {
-                setModification("edit");
                 setConfirm(true);
               }}
               variant={"outline"}
@@ -127,16 +131,32 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
             >
               <FaPencilAlt />
             </Button>
-            <Button
-              onClick={() => {
-                setModification("delete");
-                setConfirm(true);
-              }}
-              variant={"destructive"}
-              size={"icon"}
-            >
-              <FaTrash />
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant={"destructive"} size={"icon"}>
+                  <FaTrash />
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Delete?</DialogTitle>
+                  <DialogDescription>
+                    Deleting can't roll back last savings total and can't be
+                    undone.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose>
+                    <Button variant={"destructive"} onClick={() => delete_()}>
+                      Confirm
+                    </Button>
+                  </DialogClose>
+                  <DialogClose>
+                    <Button variant={"outline"}>Cancel</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </>
         )}
       </div>
