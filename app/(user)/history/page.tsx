@@ -11,6 +11,7 @@ import {
 import { usePhpPeso } from "@/lib/phpformatter";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
 const supabase = createServerComponentClient({ cookies });
 export default async function History({
   searchParams,
@@ -36,8 +37,9 @@ export default async function History({
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Cost/Amount</TableHead>
-            <TableHead>Action</TableHead>
+            <TableHead>Deducted To</TableHead>
             <TableHead>Total Savings</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -45,24 +47,40 @@ export default async function History({
             return (
               <TableRow
                 id={history.id}
-                className={`
-                ${history.is_deleted && "bg-destructive/25"}
-                ${history.is_edit && "bg-secondary/25"}
-                ${!history.is_edit && !history.is_deleted && "bg-primary/25"}
-                `}
+                // className={`
+                // ${history.is_deleted && "bg-destructive/25"}
+                // ${history.is_edit && "bg-secondary/25"}
+                // ${!history.is_edit && !history.is_deleted && "bg-primary/25"}
+                // `}
               >
-                <TableCell>
+                <TableCell
+                  className={` ${
+                    history.is_expense ? "text-destructive" : "text-primary"
+                  }`}
+                >
                   {history.name}
-                  {history.is_expense ? " (Expense)" : " (Savings)"}
                 </TableCell>
                 <TableCell>{usePhpPeso(history.amount)}</TableCell>
                 <TableCell>
-                  {(history.is_deleted && "Delete") ||
+                  {/* {(history.is_deleted && "Delete") ||
                     (history.is_edit && "Edited") ||
-                    "Added"}
+                    "Added"} */}
+                  {history.is_expense &&
+                    history.savings &&
+                    history.savings.name}
                 </TableCell>
                 <TableCell>
                   {usePhpPeso(history.savings_overall_total)}
+                </TableCell>
+                <TableCell
+                  className={`flex items-center justify-center ${
+                    (history.is_deleted && "text-destructive") ||
+                    (history.is_edit && "text-secondary") ||
+                    "text-primary"
+                  }`}
+                >
+                  {(history.is_deleted && <FaTrash />) ||
+                    (history.is_edit && <FaPencilAlt />) || <FaPlus />}
                 </TableCell>
               </TableRow>
             );
