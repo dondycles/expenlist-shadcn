@@ -63,13 +63,13 @@ export default function ExpenseEachBar({ expense }: { expense: any }) {
                   undone.
                 </DialogDescription>
               </DialogHeader>
-              <DialogFooter>
-                <DialogClose>
+              <DialogFooter className="flex flex-row w-full gap-2 ">
+                <DialogClose className="flex-1">
                   <Button variant={"destructive"} onClick={() => delete_()}>
                     Confirm
                   </Button>
                 </DialogClose>
-                <DialogClose>
+                <DialogClose className="flex-1">
                   <Button variant={"outline"}>Cancel</Button>
                 </DialogClose>
               </DialogFooter>

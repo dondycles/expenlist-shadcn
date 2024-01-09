@@ -7,7 +7,6 @@ export default function Lists({
 }: {
   searchParams: { date: string };
 }) {
-  const currentDate = new Date();
   return (
     <main className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto ">
       <ExpenseScrollable date={searchParams.date} />

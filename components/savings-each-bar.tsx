@@ -155,13 +155,13 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
                     undone.
                   </DialogDescription>
                 </DialogHeader>
-                <DialogFooter>
-                  <DialogClose>
+                <DialogFooter className="flex flex-row w-full gap-2 ">
+                  <DialogClose className="flex-1">
                     <Button variant={"destructive"} onClick={() => delete_()}>
                       Confirm
                     </Button>
                   </DialogClose>
-                  <DialogClose>
+                  <DialogClose className="flex-1">
                     <Button variant={"outline"}>Cancel</Button>
                   </DialogClose>
                 </DialogFooter>
@@ -170,10 +170,10 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
           </>
         )}
       </div>
-      {savings.expenses &&
+      {/* {savings.expenses &&
         savings.expenses.map((expense: any[any]) => {
           return <p>{expense.name}</p>;
-        })}
+        })} */}
     </div>
   );
 }

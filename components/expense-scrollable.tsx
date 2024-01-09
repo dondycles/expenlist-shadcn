@@ -6,10 +6,14 @@ const supabase = createServerComponentClient({ cookies });
 
 export default async function ExpenseCrollable({ date }: { date: string }) {
   var _ = require("lodash");
+  const options = {
+    timeZone: "Asia/Manila",
+    hour12: false, // Use 24-hour format
+  };
   const { data, error } = await supabase
     .from("expenses")
     .select("* , savings(*)")
-    .eq("date", date ? date : new Date().toDateString())
+    .eq("date", date ? date : new Date().toLocaleString("en-US", options))
     .order("created_at", { ascending: true });
   return (
     <div className="flex flex-col h-full max-h-full gap-2 overflow-auto">

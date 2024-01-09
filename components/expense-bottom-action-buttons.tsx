@@ -24,10 +24,14 @@ export default function ExpenseBottomActionButtons({
   searchParams: { date: string };
 }) {
   const route = useRouter();
+  const options = {
+    timeZone: "Asia/Manila",
+    hour12: false, // Use 24-hour format
+  };
   const [date, setDate] = useState<Date>(new Date());
   const currentDate = new Date();
   useEffect(() => {
-    route.push("/expenses?date=" + date.toDateString());
+    route.push("/expenses?date=" + date.toLocaleString("en-US", options));
   }, [date]);
 
   return (

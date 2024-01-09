@@ -13,7 +13,11 @@ export const addExpense = async ({
   savings_data: any[any];
 }) => {
   const supabase = createServerActionClient({ cookies });
-  const date = new Date().toDateString();
+  const options = {
+    timeZone: "Asia/Manila",
+    hour12: false, // Use 24-hour format
+  };
+  const date = new Date().toLocaleString("en-US", options);
 
   const { error, data } = await supabase
     .from("expenses")
