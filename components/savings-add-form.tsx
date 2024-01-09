@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { FaSpinner } from "react-icons/fa";
 import { addSavings } from "@/actions/save/add";
+import { addHistory } from "@/actions/history/add";
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -35,13 +36,23 @@ export function SavingsAddForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { error, success } = await addSavings({
+    const savings = await addSavings({
       amount: values.amount,
       name: values.name,
     });
+    console.log(savings.error, savings.success);
+    if (savings.error) return;
 
-    console.log(error, success);
-    if (error) return;
+    const history = await addHistory({
+      expense_data: null,
+      savings_data: savings.success,
+      is_deleted: false,
+      is_edit: false,
+      is_expense: false,
+    });
+    console.log(history.error, history.success);
+    if (history.error) return;
+
     form.reset();
   }
 

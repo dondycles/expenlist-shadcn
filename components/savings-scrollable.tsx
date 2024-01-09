@@ -17,9 +17,13 @@ export default async function SavingsScrollable() {
   return (
     <>
       <div className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto ">
-        {data?.map((savings) => {
-          return <SavingsEachBar savings={savings} key={savings.id} />;
-        })}
+        {error ? (
+          <p>{error.message}</p>
+        ) : (
+          data?.map((savings) => {
+            return <SavingsEachBar savings={savings} key={savings.id} />;
+          })
+        )}
       </div>
       <SavingsTotal total={total} />
     </>

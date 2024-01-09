@@ -6,11 +6,16 @@ import { cookies } from "next/headers";
 
 export const deleteExpense = async (id: UUID) => {
   const supabase = createServerActionClient({ cookies });
-  const { error } = await supabase.from("expenses").delete().eq("id", id);
+  const { error, data } = await supabase
+    .from("expenses")
+    .delete()
+    .eq("id", id)
+    .select()
+    .single();
 
   if (error) return { error: error };
 
   revalidatePath("/expenses");
 
-  return { success: "Expense Deleted!" };
+  return { success: data };
 };

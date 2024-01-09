@@ -32,6 +32,7 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
     const deleteS = await deleteSavings(savings.id);
     console.log(deleteS.error, deleteS.success);
 
+    if (deleteS.error) return;
     const history = await addHistory({
       expense_data: null,
       savings_data: deleteS.success,
@@ -39,7 +40,6 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
       is_expense: false,
       is_deleted: true,
     });
-
     console.log(history.error, history.success);
   };
 
@@ -51,10 +51,10 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
       editedValue.name === savings.name
     ) {
       setConfirm(false);
-      return { success: "Nothing Changed." };
+      return;
     }
 
-    const { error, success } = await editSavings({
+    const savingsE = await editSavings({
       amount:
         editedValue.amount === savings.amount
           ? savings.amount
@@ -63,13 +63,23 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
       id: savings.id,
     });
 
-    console.log(error, success);
+    console.log(savingsE.error, savingsE.success);
 
-    if (error) return { error };
+    if (savingsE.error) return;
+
+    const history = await addHistory({
+      expense_data: null,
+      savings_data: savingsE.success,
+      is_deleted: false,
+      is_edit: true,
+      is_expense: false,
+    });
+
+    console.log(history.error, history.success);
+    if (history.error) return;
 
     setConfirm(false);
     setModifying(false);
-    return { success };
   };
 
   return (
@@ -160,9 +170,10 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
           </>
         )}
       </div>
-      {savings.expenses.map((expense: any[any]) => {
-        return <p>{expense.name}</p>;
-      })}
+      {savings.expenses &&
+        savings.expenses.map((expense: any[any]) => {
+          return <p>{expense.name}</p>;
+        })}
     </div>
   );
 }

@@ -7,10 +7,10 @@ import { SavingsAddForm } from "./savings-add-form";
 export default function SavingsBottomActionButtons({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode | null;
 }) {
   return (
-    <div className="flex flex-row gap-2 pl-2 rounded-md">
+    <div className={`${children && "pl-2"} flex flex-row gap-2 rounded-md`}>
       {children}
       <Popover>
         <PopoverTrigger asChild>
