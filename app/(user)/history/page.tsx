@@ -67,7 +67,9 @@ export default async function History({
                     "Added"} */}
                   {history.is_expense &&
                     history.savings &&
-                    history.savings.name}
+                    history.savings.name +
+                      "-" +
+                      usePhpPeso(history.savings.amount)}
                 </TableCell>
                 <TableCell>
                   {usePhpPeso(history.savings_overall_total)}
