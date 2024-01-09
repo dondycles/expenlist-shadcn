@@ -54,7 +54,7 @@ export default function ExpenseBottomActionButtons({
             mode="single"
             selected={date}
             onSelect={(e) => {
-              setDate(new Date(e!.toDateString()));
+              setDate(new Date(e!.toLocaleString("en-US", options)));
             }}
             initialFocus
           />
