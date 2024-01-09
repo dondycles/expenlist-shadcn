@@ -39,11 +39,11 @@ export function AuthLogInForm() {
 
   const route = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<any | null>();
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setErrorMessage(null);
     const { error, success } = await logIn(values);
-
-    if (error) return console.log(error);
-
+    if (error) return setErrorMessage(error.message);
     setIsSuccessful(true);
     route.replace("/");
   }
@@ -93,6 +93,9 @@ export function AuthLogInForm() {
           >
             {!showPassword ? "hide" : "show"} password
           </Button>
+        )}
+        {errorMessage && (
+          <p className="text-sm text-center text-destructive">{errorMessage}</p>
         )}
         <Button type="submit" className="w-full text-white shadow">
           {form.formState.isSubmitting ? (

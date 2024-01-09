@@ -7,20 +7,16 @@ export const logIn = async (user: FieldValues) => {
   const email = String(user.username + "@gmail.com");
   const password = String(user.password);
   const supabase = createServerActionClient({ cookies });
-  const session = await supabase.auth.getSession();
+  // const session = await supabase.auth.getSession();
 
-  if (session.data.session?.user)
-    return { error: "You are already logged in!" };
+  // if (session.data.session?.user)
+  //   return { error: "You are already logged in!" };
 
   const { error, data } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (error) {
-    console.log(error);
-    return { error: error.message };
-  }
-
+  if (error) return { error: error };
   return { success: data };
 };

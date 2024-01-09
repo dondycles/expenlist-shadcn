@@ -7,32 +7,28 @@ import { FieldValues } from "react-hook-form";
 export const signUp = async (user: FieldValues) => {
   const email = String(user.username + "@gmail.com");
   const password = String(user.password);
-  const confirmpassword = String(user.cpassword);
   const supabase = createServerActionClient({ cookies });
-  const session = await supabase.auth.getSession();
+  // const session = await supabase.auth.getSession();
 
-  if (session.data.session?.user)
-    return { error: "You are already logged in!" };
+  // if (session.data.session?.user)
+  //   return { error: "You are already logged in!" };
 
-  if (password != confirmpassword) return { error: "Password Did Not Match!" };
+  // if (password != confirmpassword) return { error: "Password Did Not Match!" };
 
   const { error, data } = await supabase.auth.signUp({
     email,
     password,
   });
 
-  if (error) {
-    console.log(error);
-    return { error: error.message };
-  }
+  if (error) return { error: error };
 
-  const { statusText } = await supabase.from("user_data").insert([
+  const userData = await supabase.from("user_data").insert([
     {
       user_name: user.username,
     },
   ]);
 
-  console.log(statusText);
+  if (userData.error) return { error: userData.error };
 
   return { success: data };
 };
