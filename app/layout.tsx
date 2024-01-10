@@ -3,7 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import TopNavBar from "@/components/top-navbar";
-
+import QueryProvider from "@/components/QueryProvider";
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
@@ -30,7 +30,7 @@ export default function RootLayout({
         >
           <div className="flex flex-col max-h-[100dvh] h-screen overflow-auto font-montserrat">
             <TopNavBar />
-            {children}
+            <QueryProvider>{children}</QueryProvider>
           </div>
         </ThemeProvider>
       </body>

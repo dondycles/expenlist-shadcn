@@ -36,7 +36,5 @@ export const addHistory = async ({
 
   if (error) return { error: error };
 
-  revalidatePath("/expenses");
-
   return { success: "Expense Added!" };
 };

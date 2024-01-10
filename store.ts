@@ -10,3 +10,18 @@ export const useTotal = create<Total>()((set) => ({
   total: 0,
   setTotal: (total) => set((state) => ({ total: total })),
 }));
+
+type OptimisticSavings = {
+  optAddSavings: (savings: any) => void;
+  saving: any[any];
+};
+
+export const useOptimisticSavings = create<OptimisticSavings>()(
+  persist(
+    (set) => ({
+      saving: null,
+      optAddSavings: (saving) => set((state) => ({ saving: saving })),
+    }),
+    { name: "saving" }
+  )
+);

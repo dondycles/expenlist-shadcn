@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
+import { useOptimisticSavings } from "@/store";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -35,7 +35,10 @@ export function SavingsAddForm() {
     },
   });
 
+  const optimisticSavings = useOptimisticSavings();
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    optimisticSavings.optAddSavings(values);
     const savings = await addSavings({
       amount: values.amount,
       name: values.name,
