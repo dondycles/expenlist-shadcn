@@ -5,6 +5,7 @@ import SavingsScrollable from "@/components/savings-scrollable";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getSavings } from "@/actions/save/get";
 import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Savings() {
   var _ = require("lodash");
@@ -13,7 +14,7 @@ export default function Savings() {
   const { data, isFetching } = useQuery({
     queryKey: ["savings"],
     queryFn: async () => getSavings(),
-    _optimisticResults: "optimistic",
+    refetchOnWindowFocus: false,
   });
 
   const total = _.sum(
@@ -22,10 +23,30 @@ export default function Savings() {
 
   return (
     <div className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto ">
-      <SavingsScrollable
-        optimisticUpdate={optimisticUpdate}
-        savings={data?.data}
-      />
+      {isFetching ? (
+        <div className="flex flex-col h-full gap-2">
+          <Skeleton className="flex flex-row w-full gap-2 p-2 h-14">
+            <Skeleton className="flex-1 h-full bg-white/5" />
+            <Skeleton className="h-full aspect-square bg-black/50" />
+            <Skeleton className="h-full aspect-square bg-destructive/50" />
+          </Skeleton>
+          <Skeleton className="flex flex-row w-full gap-2 p-2 h-14">
+            <Skeleton className="flex-1 h-full bg-white/5" />
+            <Skeleton className="h-full aspect-square bg-black/50" />
+            <Skeleton className="h-full aspect-square bg-destructive/50" />
+          </Skeleton>
+          <Skeleton className="flex flex-row w-full gap-2 p-2 h-14">
+            <Skeleton className="flex-1 h-full bg-white/5" />
+            <Skeleton className="h-full aspect-square bg-black/50" />
+            <Skeleton className="h-full aspect-square bg-destructive/50" />
+          </Skeleton>
+        </div>
+      ) : (
+        <SavingsScrollable
+          optimisticUpdate={optimisticUpdate}
+          savings={data?.data}
+        />
+      )}
       <SavingsBottomActionButtons
         setOptimistic={(variables) => setOptimisticUpdate(variables)}
       >
