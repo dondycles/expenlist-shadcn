@@ -1,6 +1,5 @@
 "use server";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export const addExpense = async ({
@@ -15,9 +14,9 @@ export const addExpense = async ({
   const supabase = createServerActionClient({ cookies });
   const options = {
     timeZone: "Asia/Manila",
-    hour12: false, // Use 24-hour format
+    hour12: false,
   };
-  const date = new Date().toLocaleString("en-US", options);
+  const date = new Date().toLocaleDateString("en-US", options);
 
   const { error, data } = await supabase
     .from("expenses")

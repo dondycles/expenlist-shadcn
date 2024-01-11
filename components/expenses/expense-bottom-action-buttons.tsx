@@ -34,7 +34,7 @@ export default function ExpenseBottomActionButtons({
   const currentDate = new Date();
 
   useEffect(() => {
-    route.push("/expenses?date=" + date.toLocaleString("en-US", options));
+    route.push("/expenses?date=" + date.toLocaleDateString("en-US", options));
   }, [date]);
 
   return (
