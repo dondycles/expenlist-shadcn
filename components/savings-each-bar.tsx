@@ -20,7 +20,13 @@ import {
 import { addHistory } from "@/actions/history/add";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function SavingsEachBar({ savings }: { savings: any }) {
+export default function SavingsEachBar({
+  savings,
+  isOptimistic,
+}: {
+  savings: any;
+  isOptimistic?: boolean;
+}) {
   const [confirm, setConfirm] = useState(false);
   const [modifying, setModifying] = useState(false);
   const [editedValue, setEditedValue] = useState({
@@ -84,12 +90,15 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
 
     setConfirm(false);
     setModifying(false);
+    queryClient.invalidateQueries({ queryKey: ["savings"] });
   };
 
   return (
     <div
       key={savings.id}
-      className="w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-2 gap-2"
+      className={`w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-2 gap-2 ${
+        isOptimistic && "opacity-50"
+      }`}
     >
       {confirm ? (
         <>

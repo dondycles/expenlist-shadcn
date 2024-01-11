@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useOptimisticSavings } from "@/store";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,7 +16,7 @@ import { FaSpinner } from "react-icons/fa";
 import { addSavings } from "@/actions/save/add";
 import { addHistory } from "@/actions/history/add";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -28,7 +27,11 @@ const formSchema = z.object({
   }),
 });
 
-export function SavingsAddForm() {
+export function SavingsAddForm({
+  setOptimistic,
+}: {
+  setOptimistic: (variable: any | null) => void;
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,10 +40,9 @@ export function SavingsAddForm() {
     },
   });
 
-  const optimisticSavings = useOptimisticSavings();
   const [queryClient] = useState(() => useQueryClient());
 
-  const mutation = useMutation({
+  const { mutate, isPending, variables } = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => onSubmit(values),
     onSettled: () => {
       // Invalidate and refetch
@@ -49,7 +51,6 @@ export function SavingsAddForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    optimisticSavings.optAddSavings(values);
     const savings = await addSavings({
       amount: values.amount,
       name: values.name,
@@ -67,14 +68,19 @@ export function SavingsAddForm() {
     console.log(history.error, history.success);
     if (history.error) return;
 
-    queryClient.invalidateQueries({ queryKey: ["savings"] });
     form.reset();
   }
+
+  useEffect(() => {
+    setOptimistic(isPending ? variables : null);
+  }, [isPending]);
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) =>
+          mutate(values)
+        )}
         className="flex flex-col w-full gap-2 "
       >
         <FormField
@@ -102,7 +108,7 @@ export function SavingsAddForm() {
           )}
         />
         <Button type="submit" className="text-white shadow ">
-          {form.formState.isSubmitting ? (
+          {isPending ? (
             <div className="text-2xl animate-spin">
               <FaSpinner />
             </div>

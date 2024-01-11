@@ -6,8 +6,10 @@ import { SavingsAddForm } from "./savings-add-form";
 
 export default function SavingsBottomActionButtons({
   children,
+  setOptimistic,
 }: {
   children: React.ReactNode | null;
+  setOptimistic: (variables: any | null) => void;
 }) {
   return (
     <div className={`${children && "pl-2"} flex flex-row gap-2 rounded-md`}>
@@ -19,7 +21,9 @@ export default function SavingsBottomActionButtons({
           </Button>
         </PopoverTrigger>
         <PopoverContent align="end" className="w-fit">
-          <SavingsAddForm />
+          <SavingsAddForm
+            setOptimistic={(variables) => setOptimistic(variables)}
+          />
         </PopoverContent>
       </Popover>
     </div>
