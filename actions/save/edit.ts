@@ -23,7 +23,7 @@ export const editSavings = async ({
 
   if (error) return { error: error };
 
-  revalidatePath("/savings");
+  // revalidatePath("/savings");
 
   return { success: data };
 };

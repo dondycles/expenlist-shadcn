@@ -11,10 +11,11 @@ export default function Savings() {
   var _ = require("lodash");
   const [optimisticUpdate, setOptimisticUpdate] = useState();
 
-  const { data, isFetching } = useQuery({
+  const { data, isFetching, isLoading } = useQuery({
     queryKey: ["savings"],
     queryFn: async () => getSavings(),
     refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
 
   const total = _.sum(
@@ -23,7 +24,7 @@ export default function Savings() {
 
   return (
     <div className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto ">
-      {isFetching ? (
+      {isLoading ? (
         <div className="flex flex-col h-full gap-2">
           <Skeleton className="flex flex-row w-full gap-2 p-2 h-14">
             <Skeleton className="flex-1 h-full bg-white/5" />

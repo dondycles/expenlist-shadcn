@@ -18,7 +18,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { addHistory } from "@/actions/history/add";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function SavingsEachBar({
   savings,
@@ -50,7 +50,6 @@ export default function SavingsEachBar({
       is_deleted: true,
     });
     console.log(history.error, history.success);
-    queryClient.invalidateQueries({ queryKey: ["savings"] });
   };
 
   const edit_ = async () => {
@@ -90,8 +89,20 @@ export default function SavingsEachBar({
 
     setConfirm(false);
     setModifying(false);
-    queryClient.invalidateQueries({ queryKey: ["savings"] });
   };
+
+  const editMutation = useMutation({
+    mutationFn: async () => edit_(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["savings"] });
+    },
+  });
+  const deleteMutation = useMutation({
+    mutationFn: async () => delete_(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["savings"] });
+    },
+  });
 
   return (
     <div
@@ -130,7 +141,7 @@ export default function SavingsEachBar({
           </div>
         ) : confirm ? (
           <>
-            <Button onClick={edit_} size={"icon"}>
+            <Button onClick={() => editMutation.mutate()} size={"icon"}>
               <MdCheckCircle />
             </Button>
             <Button
@@ -170,7 +181,10 @@ export default function SavingsEachBar({
                 </DialogHeader>
                 <DialogFooter className="flex flex-row w-full gap-2 ">
                   <DialogClose className="flex-1">
-                    <Button variant={"destructive"} onClick={() => delete_()}>
+                    <Button
+                      variant={"destructive"}
+                      onClick={() => deleteMutation.mutate()}
+                    >
                       Confirm
                     </Button>
                   </DialogClose>

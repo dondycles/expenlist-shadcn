@@ -15,7 +15,7 @@ export const deleteSavings = async (id: UUID) => {
 
   if (error) return { error: error };
 
-  revalidatePath("/savings");
+  // revalidatePath("/savings");
 
   return { success: data };
 };

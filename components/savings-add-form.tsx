@@ -44,8 +44,7 @@ export function SavingsAddForm({
 
   const { mutate, isPending, variables } = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => onSubmit(values),
-    onSettled: () => {
-      // Invalidate and refetch
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["savings"] });
     },
   });
