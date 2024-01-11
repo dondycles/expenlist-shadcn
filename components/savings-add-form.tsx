@@ -38,6 +38,15 @@ export function SavingsAddForm() {
   });
 
   const optimisticSavings = useOptimisticSavings();
+  const [queryClient] = useState(() => useQueryClient());
+
+  const mutation = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => onSubmit(values),
+    onSettled: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["savings"] });
+    },
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     optimisticSavings.optAddSavings(values);
@@ -58,25 +67,14 @@ export function SavingsAddForm() {
     console.log(history.error, history.success);
     if (history.error) return;
 
+    queryClient.invalidateQueries({ queryKey: ["savings"] });
     form.reset();
   }
-
-  const [queryClient] = useState(() => useQueryClient());
-
-  const mutation = useMutation({
-    mutationFn: async (values: z.infer<typeof formSchema>) => onSubmit(values),
-    onSettled: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["savings"] });
-    },
-  });
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) =>
-          mutation.mutate(values)
-        )}
+        onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col w-full gap-2 "
       >
         <FormField

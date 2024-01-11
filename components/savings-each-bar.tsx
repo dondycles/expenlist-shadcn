@@ -18,6 +18,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { addHistory } from "@/actions/history/add";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function SavingsEachBar({ savings }: { savings: any }) {
   const [confirm, setConfirm] = useState(false);
@@ -26,6 +27,8 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
     name: savings.name,
     amount: savings.amount,
   });
+
+  const [queryClient] = useState(() => useQueryClient());
 
   const delete_ = async () => {
     setModifying(true);
@@ -41,6 +44,7 @@ export default function SavingsEachBar({ savings }: { savings: any }) {
       is_deleted: true,
     });
     console.log(history.error, history.success);
+    queryClient.invalidateQueries({ queryKey: ["savings"] });
   };
 
   const edit_ = async () => {
