@@ -28,7 +28,6 @@ export default function SavingsEachBar({
   isOptimistic?: boolean;
 }) {
   const [confirm, setConfirm] = useState(false);
-  const [modifying, setModifying] = useState(false);
   const [editedValue, setEditedValue] = useState({
     name: savings.name,
     amount: savings.amount,
@@ -37,7 +36,6 @@ export default function SavingsEachBar({
   const [queryClient] = useState(() => useQueryClient());
 
   const delete_ = async () => {
-    setModifying(true);
     const deleteS = await deleteSavings(savings.id);
     console.log(deleteS.error, deleteS.success);
 
@@ -53,8 +51,6 @@ export default function SavingsEachBar({
   };
 
   const edit_ = async () => {
-    setModifying(true);
-
     if (
       editedValue.amount === savings.amount &&
       editedValue.name === savings.name
@@ -88,16 +84,15 @@ export default function SavingsEachBar({
     if (history.error) return;
 
     setConfirm(false);
-    setModifying(false);
   };
 
-  const editMutation = useMutation({
+  const { mutate: editt, isPending: editPending } = useMutation({
     mutationFn: async () => edit_(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["savings"] });
     },
   });
-  const deleteMutation = useMutation({
+  const { mutate: deletee, isPending: deletePending } = useMutation({
     mutationFn: async () => delete_(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["savings"] });
@@ -135,13 +130,13 @@ export default function SavingsEachBar({
         </>
       )}
       <div className="flex flex-row gap-2 ml-auto mr-0">
-        {modifying ? (
+        {deletePending || editPending ? (
           <div className="flex items-center justify-center w-10 h-10 text-2xl animate-spin">
             <FaSpinner />
           </div>
         ) : confirm ? (
           <>
-            <Button onClick={() => editMutation.mutate()} size={"icon"}>
+            <Button onClick={() => editt()} size={"icon"}>
               <MdCheckCircle />
             </Button>
             <Button
@@ -181,10 +176,7 @@ export default function SavingsEachBar({
                 </DialogHeader>
                 <DialogFooter className="flex flex-row w-full gap-2 ">
                   <DialogClose className="flex-1">
-                    <Button
-                      variant={"destructive"}
-                      onClick={() => deleteMutation.mutate()}
-                    >
+                    <Button variant={"destructive"} onClick={() => deletee()}>
                       Confirm
                     </Button>
                   </DialogClose>
