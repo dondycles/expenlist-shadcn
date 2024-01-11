@@ -1,9 +1,9 @@
 "use client";
 import { FaPencilAlt, FaSpinner, FaTrash } from "react-icons/fa";
 import { MdCancel, MdCheckCircle } from "react-icons/md";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useState } from "react";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { editSavings } from "@/actions/save/edit";
 import { usePhpPeso } from "@/lib/phpformatter";
 import { deleteSavings } from "@/actions/save/delete";

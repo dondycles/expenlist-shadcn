@@ -1,6 +1,6 @@
 "use client";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Button } from "./ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Button } from "../ui/button";
 import { FaPlus } from "react-icons/fa";
 import { SavingsAddForm } from "./savings-add-form";
 

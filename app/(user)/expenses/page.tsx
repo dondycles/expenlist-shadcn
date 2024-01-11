@@ -1,6 +1,6 @@
 "use client";
-import ExpenseBottomActionButtons from "@/components/expense-bottom-action-buttons";
-import ExpenseScrollable from "@/components/expense-scrollable";
+import ExpenseBottomActionButtons from "@/components/expenses/expense-bottom-action-buttons";
+import ExpenseScrollable from "@/components/expenses/expense-scrollable";
 import { useQuery } from "@tanstack/react-query";
 import { getExpenses } from "@/actions/expense/get";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -28,19 +28,16 @@ export default function Expenses({
     <main className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto ">
       {isLoading ? (
         <div className="flex flex-col h-full gap-2">
-          <Skeleton className="flex flex-row w-full gap-1 p-1 h-14">
+          <Skeleton className="flex flex-row w-full h-12 gap-1 p-1">
             <Skeleton className="flex-1 h-full bg-white/5" />
-            <Skeleton className="h-full aspect-square bg-black/50" />
             <Skeleton className="h-full aspect-square bg-destructive/50" />
           </Skeleton>
-          <Skeleton className="flex flex-row w-full gap-1 p-1 h-14">
+          <Skeleton className="flex flex-row w-full h-12 gap-1 p-1">
             <Skeleton className="flex-1 h-full bg-white/5" />
-            <Skeleton className="h-full aspect-square bg-black/50" />
             <Skeleton className="h-full aspect-square bg-destructive/50" />
           </Skeleton>
-          <Skeleton className="flex flex-row w-full gap-1 p-1 h-14">
+          <Skeleton className="flex flex-row w-full h-12 gap-1 p-1">
             <Skeleton className="flex-1 h-full bg-white/5" />
-            <Skeleton className="h-full aspect-square bg-black/50" />
             <Skeleton className="h-full aspect-square bg-destructive/50" />
           </Skeleton>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { AuthLogInForm } from "@/components/auth-login-form";
-import { AuthSignUpForm } from "@/components/auth-signup-form";
+import { AuthLogInForm } from "@/components/auth/auth-login-form";
+import { AuthSignUpForm } from "@/components/auth/auth-signup-form";
 import { Button } from "@/components/ui/button";
 import { FaPencilAlt } from "react-icons/fa";
 

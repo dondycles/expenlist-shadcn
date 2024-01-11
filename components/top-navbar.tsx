@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ModeToggle } from "./theme-button";
+import { ModeToggle } from "./theme/theme-button";
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import TopNavBarUserButton from "./top-navbar-user-button";
