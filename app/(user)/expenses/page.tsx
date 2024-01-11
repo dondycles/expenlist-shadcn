@@ -16,6 +16,8 @@ export default function Expenses({
   const { data, isLoading } = useQuery({
     queryKey: ["expenses", searchParams.date],
     queryFn: async () => getExpenses(searchParams.date),
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
 
   const total = _.sum(
