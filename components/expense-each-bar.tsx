@@ -16,7 +16,13 @@ import {
 } from "@/components/ui/dialog";
 import { addHistory } from "@/actions/history/add";
 
-export default function ExpenseEachBar({ expense }: { expense: any }) {
+export default function ExpenseEachBar({
+  expense,
+  isOptimistic,
+}: {
+  expense: any;
+  isOptimistic?: boolean;
+}) {
   const [modifying, setModifying] = useState(false);
 
   const delete_ = async () => {
@@ -36,7 +42,9 @@ export default function ExpenseEachBar({ expense }: { expense: any }) {
   return (
     <div
       key={expense.id}
-      className="w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-2 gap-2"
+      className={`w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-1 gap-1 ${
+        isOptimistic && "opacity-50"
+      }`}
     >
       <p className="flex items-center p-2 font-semibold text-primary">
         {expense.name}
@@ -63,7 +71,7 @@ export default function ExpenseEachBar({ expense }: { expense: any }) {
                   undone.
                 </DialogDescription>
               </DialogHeader>
-              <DialogFooter className="flex flex-row w-full gap-2 ">
+              <DialogFooter className="flex flex-row w-full">
                 <DialogClose className="flex-1">
                   <Button variant={"destructive"} onClick={() => delete_()}>
                     Confirm

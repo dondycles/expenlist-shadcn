@@ -1,17 +1,19 @@
 "use client";
 import ExpenseBottomActionButtons from "@/components/expense-bottom-action-buttons";
 import ExpenseScrollable from "@/components/expense-scrollable";
-import ExpenseTotal from "@/components/expense-total";
 import { useQuery } from "@tanstack/react-query";
 import { getExpenses } from "@/actions/expense/get";
+import { Skeleton } from "@/components/ui/skeleton";
+import { usePhpPeso } from "@/lib/phpformatter";
+import { useState } from "react";
 export default function Expenses({
   searchParams,
 }: {
   searchParams: { date: string };
 }) {
   var _ = require("lodash");
-
-  const { data, isFetching, isLoading } = useQuery({
+  const [optimisticUpdate, setOptimisticUpdate] = useState();
+  const { data, isLoading } = useQuery({
     queryKey: ["expenses", searchParams.date],
     queryFn: async () => getExpenses(searchParams.date),
   });
@@ -22,9 +24,35 @@ export default function Expenses({
 
   return (
     <main className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto ">
-      <ExpenseScrollable history={data?.success} />
-      <ExpenseBottomActionButtons searchParams={searchParams}>
-        <ExpenseTotal total={total} />
+      {isLoading ? (
+        <div className="flex flex-col h-full gap-2">
+          <Skeleton className="flex flex-row w-full gap-2 p-2 h-14">
+            <Skeleton className="flex-1 h-full bg-white/5" />
+            <Skeleton className="h-full aspect-square bg-black/50" />
+            <Skeleton className="h-full aspect-square bg-destructive/50" />
+          </Skeleton>
+          <Skeleton className="flex flex-row w-full gap-2 p-2 h-14">
+            <Skeleton className="flex-1 h-full bg-white/5" />
+            <Skeleton className="h-full aspect-square bg-black/50" />
+            <Skeleton className="h-full aspect-square bg-destructive/50" />
+          </Skeleton>
+          <Skeleton className="flex flex-row w-full gap-2 p-2 h-14">
+            <Skeleton className="flex-1 h-full bg-white/5" />
+            <Skeleton className="h-full aspect-square bg-black/50" />
+            <Skeleton className="h-full aspect-square bg-destructive/50" />
+          </Skeleton>
+        </div>
+      ) : (
+        <ExpenseScrollable
+          optimisticUpdate={optimisticUpdate}
+          history={data?.success}
+        />
+      )}
+      <ExpenseBottomActionButtons
+        setOptimistic={(expense) => setOptimisticUpdate(expense)}
+        searchParams={searchParams}
+      >
+        <p>{usePhpPeso(total)}</p>
       </ExpenseBottomActionButtons>
     </main>
   );

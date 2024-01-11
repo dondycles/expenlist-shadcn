@@ -14,12 +14,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FaSpinner } from "react-icons/fa";
-import { addExpense } from "@/actions/expense/add";
 import { ExpenseDeductFromComboBox } from "./expense-deduct-from-combobox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { editSavings } from "@/actions/save/edit";
 import { UUID } from "crypto";
 import { addHistory } from "@/actions/history/add";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addExpense } from "@/actions/expense/add";
 
 const formSchema = z.object({
   cost: z.string().min(1, {
@@ -31,7 +32,11 @@ const formSchema = z.object({
   savings_id: z.string().nullable(),
 });
 
-export function ExpenseAddForm() {
+export function ExpenseAddForm({
+  setOptimistic,
+}: {
+  setOptimistic: (variable: any | null) => void;
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,6 +48,20 @@ export function ExpenseAddForm() {
 
   const [costToDeduct, setCostToDeduct] = useState(0);
   const [savingsData, setSavingsData] = useState<any[any]>();
+
+  const [queryClient] = useState(() => useQueryClient());
+
+  const {
+    mutate: addExpense_,
+    isPending,
+    variables,
+  } = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => onSubmit(values),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["expenses"] });
+    },
+  });
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (savingsData) {
       const expense = await addExpense({
@@ -75,8 +94,6 @@ export function ExpenseAddForm() {
       setSavingsData(null);
 
       form.reset();
-
-      return;
     }
 
     const { error, success } = await addExpense({
@@ -103,10 +120,16 @@ export function ExpenseAddForm() {
     form.reset();
   }
 
+  useEffect(() => {
+    setOptimistic(isPending ? variables : null);
+  }, [isPending]);
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) =>
+          addExpense_(values)
+        )}
         className="flex flex-col w-full gap-2"
       >
         <FormField
@@ -150,7 +173,7 @@ export function ExpenseAddForm() {
           variant={"default"}
           className={`text-white shadow `}
         >
-          {form.formState.isSubmitting ? (
+          {isPending ? (
             <div className="text-2xl animate-spin">
               <FaSpinner />
             </div>

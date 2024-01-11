@@ -34,7 +34,7 @@ export const addExpense = async ({
 
   if (error) return { error: error };
 
-  revalidatePath("/expenses");
+  // revalidatePath("/expenses");
 
   return { success: data };
 };

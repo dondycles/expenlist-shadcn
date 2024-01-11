@@ -12,7 +12,11 @@ export default function SavingsBottomActionButtons({
   setOptimistic: (variables: any | null) => void;
 }) {
   return (
-    <div className={`${children && "pl-2"} flex flex-row gap-2 rounded-md`}>
+    <div
+      className={`${
+        children && "pl-2"
+      } flex flex-row gap-2 rounded-md items-center`}
+    >
       {children}
       <Popover>
         <PopoverTrigger asChild>

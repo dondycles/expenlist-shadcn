@@ -102,7 +102,7 @@ export default function SavingsEachBar({
   return (
     <div
       key={savings.id}
-      className={`w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-2 gap-2 ${
+      className={`w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-1 gap-1 ${
         isOptimistic && "opacity-50"
       }`}
     >
@@ -129,7 +129,7 @@ export default function SavingsEachBar({
           <p className="flex items-center p-2 ">{usePhpPeso(savings.amount)}</p>
         </>
       )}
-      <div className="flex flex-row gap-2 ml-auto mr-0">
+      <div className="flex flex-row gap-1 ml-auto mr-0">
         {deletePending || editPending ? (
           <div className="flex items-center justify-center w-10 h-10 text-2xl animate-spin">
             <FaSpinner />
@@ -174,7 +174,7 @@ export default function SavingsEachBar({
                     undone.
                   </DialogDescription>
                 </DialogHeader>
-                <DialogFooter className="flex flex-row w-full gap-2 ">
+                <DialogFooter className="flex flex-row w-full">
                   <DialogClose className="flex-1">
                     <Button variant={"destructive"} onClick={() => deletee()}>
                       Confirm

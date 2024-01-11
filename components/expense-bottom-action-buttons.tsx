@@ -19,9 +19,11 @@ import { ExpenseAddForm } from "./expense-add-form";
 export default function ExpenseBottomActionButtons({
   children,
   searchParams,
+  setOptimistic,
 }: {
   children: React.ReactNode;
   searchParams: { date: string };
+  setOptimistic: (variables: any | null) => void;
 }) {
   const route = useRouter();
   const options = {
@@ -38,7 +40,7 @@ export default function ExpenseBottomActionButtons({
   return (
     <div className="flex flex-row items-center justify-between w-full gap-2">
       <Popover>
-        <PopoverTrigger asChild className="p-0">
+        <PopoverTrigger asChild className="p-0 pr-2">
           <Button
             variant={"outline"}
             className={cn(
@@ -79,7 +81,9 @@ export default function ExpenseBottomActionButtons({
             </Button>
           </PopoverTrigger>
           <PopoverContent align="end" className="w-fit">
-            <ExpenseAddForm />
+            <ExpenseAddForm
+              setOptimistic={(expense) => setOptimistic(expense)}
+            />
           </PopoverContent>
         </Popover>
       </div>
