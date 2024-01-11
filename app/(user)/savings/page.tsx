@@ -25,7 +25,7 @@ export default function Savings() {
   return (
     <div className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto ">
       {isLoading ? (
-        <div className="flex flex-col h-full gap-1">
+        <div className="flex flex-col h-full gap-2">
           <Skeleton className="flex flex-row w-full gap-1 p-1 h-14">
             <Skeleton className="flex-1 h-full bg-white/5" />
             <Skeleton className="h-full aspect-square bg-black/50" />
