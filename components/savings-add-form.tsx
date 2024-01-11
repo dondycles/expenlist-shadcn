@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import { FaSpinner } from "react-icons/fa";
 import { addSavings } from "@/actions/save/add";
 import { addHistory } from "@/actions/history/add";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
 const formSchema = z.object({
   amount: z.string().min(1, {
@@ -59,10 +61,22 @@ export function SavingsAddForm() {
     form.reset();
   }
 
+  const [queryClient] = useState(() => useQueryClient());
+
+  const mutation = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => onSubmit(values),
+    onSettled: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["savings"] });
+    },
+  });
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit((values: z.infer<typeof formSchema>) =>
+          mutation.mutate(values)
+        )}
         className="flex flex-col w-full gap-2 "
       >
         <FormField
