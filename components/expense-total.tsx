@@ -1,20 +1,8 @@
+"use client";
 import { usePhpPeso } from "@/lib/phpformatter";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
 var _ = require("lodash");
-const supabase = createServerComponentClient({ cookies });
 
-export default async function ExpenseTotal() {
-  const date = new Date().toDateString();
-  const { data, error } = await supabase
-    .from("expenses")
-    .select("cost")
-    .eq("date", date);
-
-  const total = _.sum(
-    data?.map((expense: { cost: any }) => Number(expense.cost))
-  );
-
+export default function ExpenseTotal({ total }: { total: number }) {
   return (
     <div className="flex flex-row items-center gap-2">
       <p className="text-primary-foreground">{usePhpPeso(total)}</p>

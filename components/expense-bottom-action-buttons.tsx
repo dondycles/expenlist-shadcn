@@ -30,6 +30,7 @@ export default function ExpenseBottomActionButtons({
   };
   const [date, setDate] = useState<Date>(new Date());
   const currentDate = new Date();
+
   useEffect(() => {
     route.push("/expenses?date=" + date.toLocaleString("en-US", options));
   }, [date]);

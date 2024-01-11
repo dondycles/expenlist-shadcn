@@ -2,9 +2,9 @@
 import SavingsTotal from "@/components/savings-total";
 import SavingsBottomActionButtons from "@/components/savings-bottom-action-buttons";
 import SavingsScrollable from "@/components/savings-scrollable";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getSavings } from "@/actions/save/get";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Savings() {
