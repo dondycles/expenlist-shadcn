@@ -15,6 +15,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { addHistory } from "@/actions/history/add";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function ExpenseEachBar({
   expense,
@@ -23,10 +24,9 @@ export default function ExpenseEachBar({
   expense: any;
   isOptimistic?: boolean;
 }) {
-  const [modifying, setModifying] = useState(false);
+  const [queryClient] = useState(() => useQueryClient());
 
   const delete_ = async () => {
-    setModifying(true);
     const deleteE = await deleteExpense(expense.id);
     console.log(deleteE.error, deleteE.success);
     const history = await addHistory({
@@ -39,10 +39,17 @@ export default function ExpenseEachBar({
     console.log(history.error, history.success);
   };
 
+  const { mutate: deletee, isPending: deletePending } = useMutation({
+    mutationFn: async () => delete_(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["expenses"] });
+    },
+  });
+
   return (
     <div
       key={expense.id}
-      className={`w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-1 gap-1 ${
+      className={`w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-1 gap-1 overflow-x-clip ${
         isOptimistic && "opacity-50"
       }`}
     >
@@ -52,7 +59,7 @@ export default function ExpenseEachBar({
       <p className="flex items-center p-2 ">{usePhpPeso(expense.cost)}</p>
 
       <div className="flex flex-row gap-2 ml-auto mr-0">
-        {modifying ? (
+        {deletePending ? (
           <div className="flex items-center justify-center w-10 h-10 text-2xl animate-spin">
             <FaSpinner />
           </div>
@@ -73,7 +80,7 @@ export default function ExpenseEachBar({
               </DialogHeader>
               <DialogFooter className="flex flex-row w-full">
                 <DialogClose className="flex-1">
-                  <Button variant={"destructive"} onClick={() => delete_()}>
+                  <Button variant={"destructive"} onClick={() => deletee()}>
                     Confirm
                   </Button>
                 </DialogClose>
