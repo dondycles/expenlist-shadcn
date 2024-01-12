@@ -10,13 +10,13 @@ export default function BottomNavBar() {
       <Button
         variant={pathname === "/expenses" ? "default" : "outline"}
         asChild
-        className="flex-1 border-none"
+        className="flex-1 text-xs border-none"
         size={"sm"}
       >
         <Link href={"/expenses"}>Expenses</Link>
       </Button>
       <Button
-        className="flex-1 border-none"
+        className="flex-1 text-xs border-none"
         variant={pathname === "/savings" ? "default" : "outline"}
         asChild
         size={"sm"}
@@ -26,7 +26,7 @@ export default function BottomNavBar() {
       <Button
         variant={pathname === "/history" ? "default" : "outline"}
         asChild
-        className="flex-1 border-none"
+        className="flex-1 text-xs border-none"
         size={"sm"}
       >
         <Link href={"/history"}>History</Link>
@@ -34,7 +34,7 @@ export default function BottomNavBar() {
       <Button
         variant={pathname === "/analysis" ? "default" : "outline"}
         asChild
-        className="flex-1 border-none"
+        className="flex-1 text-xs border-none"
         size={"sm"}
       >
         <Link href={"/analysis"}>Analysis</Link>
