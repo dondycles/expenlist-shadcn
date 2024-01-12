@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { logOut } from "@/actions/user/logout";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 export default function TopNavBarUserButton({ user }: { user: any }) {
   const route = useRouter();
@@ -25,9 +24,13 @@ export default function TopNavBarUserButton({ user }: { user: any }) {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
+        <DropdownMenuItem
+          onClick={async () => {
+            route.push("/profile");
+          }}
+        >
           <User className="w-4 h-4 mr-2" />
-          <Link href={"/profile"}>Profile</Link>
+          <span>Profile</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={async () => {

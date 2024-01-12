@@ -52,7 +52,7 @@ export function AuthLogInForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className=" space-y-2 max-w-[400px]"
+        className=" space-y-1 max-w-[400px]"
       >
         <FormField
           control={form.control}
