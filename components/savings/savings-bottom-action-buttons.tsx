@@ -14,13 +14,13 @@ export default function SavingsBottomActionButtons({
   return (
     <div
       className={`${
-        children && "pl-2"
-      } flex flex-row gap-2 rounded-md items-center`}
+        children && "p-1"
+      } flex flex-row gap-1 items-center bg-primary/25 rounded-[0.5rem]`}
     >
       {children}
       <Popover>
         <PopoverTrigger asChild>
-          <Button className="text-xs shadow" size={"icon"}>
+          <Button className="text-xs shadow" size={"sm"}>
             <FaPlus />
           </Button>
         </PopoverTrigger>

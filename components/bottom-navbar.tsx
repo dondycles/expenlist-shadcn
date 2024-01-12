@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { usePathname } from "next/navigation";
-import { TabsTrigger, TabsList, Tabs } from "./ui/tabs";
 
 export default function BottomNavBar() {
   const pathname = usePathname();
@@ -11,13 +10,13 @@ export default function BottomNavBar() {
       <Button
         variant={pathname === "/expenses" ? "default" : "outline"}
         asChild
-        className="flex-1"
+        className="flex-1 border-none"
         size={"sm"}
       >
         <Link href={"/expenses"}>Expenses</Link>
       </Button>
       <Button
-        className="flex-1"
+        className="flex-1 border-none"
         variant={pathname === "/savings" ? "default" : "outline"}
         asChild
         size={"sm"}
@@ -27,10 +26,18 @@ export default function BottomNavBar() {
       <Button
         variant={pathname === "/history" ? "default" : "outline"}
         asChild
-        className="flex-1"
+        className="flex-1 border-none"
         size={"sm"}
       >
         <Link href={"/history"}>History</Link>
+      </Button>
+      <Button
+        variant={pathname === "/analysis" ? "default" : "outline"}
+        asChild
+        className="flex-1 border-none"
+        size={"sm"}
+      >
+        <Link href={"/analysis"}>Analysis</Link>
       </Button>
     </div>
   );

@@ -132,10 +132,10 @@ export default function History({
                 })}
             </TableBody>
           </Table>
-          <div className="flex flex-row items-center justify-between gap-2 mt-auto mb-0">
+          <div className="flex flex-row items-center gap-1 p-1 mt-auto mb-0 bg-primary/25 rounded-[0.5rem]">
             {Number(searchParams.range) > 20 ? (
-              <div className="flex flex-row gap-2">
-                <Button asChild>
+              <div className="flex flex-row gap-1">
+                <Button size={"sm"} asChild>
                   <Link
                     href={`/history?range=${
                       Number(searchParams.range) === 10 ||
@@ -148,14 +148,14 @@ export default function History({
                     -10
                   </Link>
                 </Button>
-                <Button asChild>
+                <Button size={"sm"} asChild>
                   <Link href={`/history?range=10`}>Back to first</Link>
                 </Button>
               </div>
             ) : (
               <>
                 {Number(searchParams.range) > 10 && (
-                  <Button asChild>
+                  <Button size={"sm"} asChild>
                     <Link
                       href={`/history?range=${
                         Number(searchParams.range) === 10 ||
@@ -174,10 +174,9 @@ export default function History({
               </>
             )}
 
-            <p>Last 10 History</p>
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row gap-1 ml-auto mr-0">
               {searchParams.last === "false" && (
-                <Button asChild>
+                <Button size={"sm"} asChild>
                   <Link
                     href={`
               /history?range=10&last=true
@@ -187,7 +186,7 @@ export default function History({
                   </Link>
                 </Button>
               )}
-              <Button asChild>
+              <Button size={"sm"} asChild>
                 <Link
                   href={`
               /history?range=${

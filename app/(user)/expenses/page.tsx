@@ -44,7 +44,9 @@ export default function Expenses({
         setOptimistic={(expense) => setOptimisticUpdate(expense)}
         searchParams={searchParams}
       >
-        <p>{usePhpPeso(total)}</p>
+        <p className="flex items-center justify-center flex-1 h-full rounded-md bg-primary-foreground">
+          {usePhpPeso(total)}
+        </p>
       </ExpenseBottomActionButtons>
     </main>
   );
