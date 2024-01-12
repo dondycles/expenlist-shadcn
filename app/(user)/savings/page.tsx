@@ -43,7 +43,7 @@ export default function Savings() {
       <SavingsBottomActionButtons
         setOptimistic={(variables) => setOptimisticUpdate(variables)}
       >
-        <p className="flex items-center justify-center flex-1 h-full rounded-md bg-primary-foreground">
+        <p className="flex items-center justify-center flex-1 h-full rounded-md bg-background">
           {usePhpPeso(total)}
         </p>
       </SavingsBottomActionButtons>
