@@ -13,7 +13,7 @@ export default function Expenses({
 }) {
   var _ = require("lodash");
   const [optimisticUpdate, setOptimisticUpdate] = useState();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["expenses", searchParams.date],
     queryFn: async () => getExpenses(searchParams.date),
     refetchOnWindowFocus: false,

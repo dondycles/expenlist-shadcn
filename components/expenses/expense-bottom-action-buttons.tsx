@@ -15,6 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ExpenseAddForm } from "./expense-add-form";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function ExpenseBottomActionButtons({
   children,
@@ -32,9 +33,11 @@ export default function ExpenseBottomActionButtons({
   };
   const [date, setDate] = useState<Date>(new Date());
   const currentDate = new Date();
+  const [queryClient] = useState(() => useQueryClient());
 
   useEffect(() => {
     route.push("/expenses?date=" + date.toLocaleDateString("en-US", options));
+    queryClient.invalidateQueries({ queryKey: ["expenses", date] });
   }, [date]);
 
   return (
