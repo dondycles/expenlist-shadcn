@@ -32,7 +32,7 @@ export default function History({
   });
 
   return (
-    <div className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto">
+    <div className="flex flex-col w-full h-full max-h-full gap-1 overflow-auto">
       {isLoading ? (
         <Table className="text-xs sm:text-sm">
           <TableHeader>
