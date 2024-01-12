@@ -8,7 +8,7 @@ export default function SavingsScrollable({
   optimisticUpdate: any | null;
 }) {
   return (
-    <div className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto ">
+    <div className="flex flex-col w-full h-full max-h-full gap-1 overflow-auto ">
       {savings?.map((saving: any[any]) => {
         return <SavingsEachBar savings={saving} key={saving.id} />;
       })}

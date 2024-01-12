@@ -9,7 +9,7 @@ export default function ExpenseCrollable({
   optimisticUpdate: any | null;
 }) {
   return (
-    <div className="flex flex-col h-full max-h-full gap-2 overflow-auto">
+    <div className="flex flex-col h-full max-h-full gap-1 overflow-auto">
       {history?.map((his: any) => {
         return <ExpenseEachBar expense={his} key={his.id} />;
       })}

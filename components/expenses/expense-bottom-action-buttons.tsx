@@ -41,7 +41,7 @@ export default function ExpenseBottomActionButtons({
   }, [date]);
 
   return (
-    <div className="flex flex-row items-center justify-between w-full gap-1 bg-primary/25 rounded-[0.5rem] p-1 ">
+    <div className="flex flex-row items-center justify-between w-full gap-1 bg-primary/25 rounded-[0.5rem] p-1 shadow">
       <Popover>
         <PopoverTrigger asChild className="p-0">
           <Button

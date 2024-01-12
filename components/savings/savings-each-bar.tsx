@@ -102,7 +102,7 @@ export default function SavingsEachBar({
   return (
     <div
       key={savings.id}
-      className={`w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-1 gap-1 overflow-x-clip  ${
+      className={` w-full rounded-[0.5rem] grid grid-cols-3 bg-primary/10 p-1 gap-1 overflow-x-clip  ${
         isOptimistic && "opacity-50"
       }`}
     >

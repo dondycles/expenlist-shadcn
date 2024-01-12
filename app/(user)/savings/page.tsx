@@ -22,7 +22,7 @@ export default function Savings() {
   );
 
   return (
-    <div className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto ">
+    <div className="flex flex-col w-full h-full max-h-full gap-1 overflow-auto">
       {isLoading ? (
         <div className="flex flex-col h-full gap-2">
           {Array.from({ length: 10 }, () => (
