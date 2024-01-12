@@ -109,12 +109,9 @@ export default function History({
                 })}
             </TableBody>
           </Table>
-          <div className="flex flex-row justify-between gap-2 mt-auto mb-0">
+          <div className="flex flex-row items-center justify-between gap-2 mt-auto mb-0">
             {Number(searchParams.range) > 20 ? (
               <div className="flex flex-row gap-2">
-                <Button asChild>
-                  <Link href={`/history?range=10`}>Back to first</Link>
-                </Button>
                 <Button asChild>
                   <Link
                     href={`/history?range=${
@@ -127,6 +124,9 @@ export default function History({
                   >
                     -10
                   </Link>
+                </Button>
+                <Button asChild>
+                  <Link href={`/history?range=10`}>Back to first</Link>
                 </Button>
               </div>
             ) : (
@@ -153,6 +153,17 @@ export default function History({
 
             <p>Last 10 History</p>
             <div className="flex flex-row gap-2">
+              {searchParams.last === "false" && (
+                <Button asChild>
+                  <Link
+                    href={`
+              /history?range=10&last=true
+            `}
+                  >
+                    From the last
+                  </Link>
+                </Button>
+              )}
               <Button asChild>
                 <Link
                   href={`
@@ -166,17 +177,6 @@ export default function History({
                   +10
                 </Link>
               </Button>
-              {searchParams.last === "false" && (
-                <Button asChild>
-                  <Link
-                    href={`
-              /history?range=10&last=true
-            `}
-                  >
-                    From the last
-                  </Link>
-                </Button>
-              )}
             </div>
           </div>
         </>
