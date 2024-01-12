@@ -18,7 +18,7 @@ export default async function TopNavBar() {
       <Link href={"/"} className="text-xl font-extrabold">
         Expen//Save.
       </Link>
-      <div className="flex flex-row items-center justify-center gap-2">
+      <div className="flex flex-row items-center justify-center gap-1">
         <ModeToggle />
         {data && <TopNavBarUserButton user={data} />}
       </div>
