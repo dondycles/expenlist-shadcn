@@ -1,4 +1,5 @@
 "use client";
+import { ScrollArea } from "../ui/scroll-area";
 import ExpenseEachBar from "./expense-each-bar";
 
 export default function ExpenseCrollable({
@@ -9,17 +10,19 @@ export default function ExpenseCrollable({
   optimisticUpdate: any | null;
 }) {
   return (
-    <div className="flex flex-col h-full max-h-full gap-1 overflow-auto">
-      {history?.map((his: any) => {
-        return <ExpenseEachBar expense={his} key={his.id} />;
-      })}
-      {optimisticUpdate && (
-        <ExpenseEachBar
-          isOptimistic={true}
-          expense={optimisticUpdate}
-          key={"opt"}
-        />
-      )}
-    </div>
+    <ScrollArea className="h-full">
+      <div className="space-y-1">
+        {history?.map((his: any) => {
+          return <ExpenseEachBar expense={his} key={his.id} />;
+        })}
+        {optimisticUpdate && (
+          <ExpenseEachBar
+            isOptimistic={true}
+            expense={optimisticUpdate}
+            key={"opt"}
+          />
+        )}
+      </div>
+    </ScrollArea>
   );
 }

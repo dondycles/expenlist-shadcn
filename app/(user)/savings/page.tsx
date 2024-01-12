@@ -6,6 +6,7 @@ import { getSavings } from "@/actions/save/get";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePhpPeso } from "@/lib/phpformatter";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export default function Savings() {
   var _ = require("lodash");
