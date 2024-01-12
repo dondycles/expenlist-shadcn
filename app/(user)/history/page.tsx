@@ -34,23 +34,46 @@ export default function History({
   return (
     <div className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto">
       {isLoading ? (
-        <div className="flex flex-col h-full gap-2">
-          <Skeleton className="flex flex-row w-full h-12 gap-1 p-1">
-            <Skeleton className="flex-1 h-full bg-white/5" />
-            <Skeleton className="h-full aspect-square bg-black/50" />
-            <Skeleton className="h-full aspect-square bg-destructive/50" />
-          </Skeleton>
-          <Skeleton className="flex flex-row w-full h-12 gap-1 p-1">
-            <Skeleton className="flex-1 h-full bg-white/5" />
-            <Skeleton className="h-full aspect-square bg-black/50" />
-            <Skeleton className="h-full aspect-square bg-destructive/50" />
-          </Skeleton>
-          <Skeleton className="flex flex-row w-full h-12 gap-1 p-1">
-            <Skeleton className="flex-1 h-full bg-white/5" />
-            <Skeleton className="h-full aspect-square bg-black/50" />
-            <Skeleton className="h-full aspect-square bg-destructive/50" />
-          </Skeleton>
-        </div>
+        <Table className="text-xs sm:text-sm">
+          <TableHeader>
+            <TableRow>
+              <TableHead></TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Cost/Amount</TableHead>
+              <TableHead>Deducted To</TableHead>
+              <TableHead>Total Savings</TableHead>
+              <TableHead>Date</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Array.from({ length: 10 }, () => (
+              <TableRow>
+                <TableCell
+                  className={`flex items-center justify-center `}
+                ></TableCell>
+                <TableCell>
+                  <Skeleton className="w-full h-5" />
+                </TableCell>
+                <TableCell>
+                  {" "}
+                  <Skeleton className="w-full h-5" />
+                </TableCell>
+                <TableCell>
+                  {" "}
+                  <Skeleton className="w-full h-5" />
+                </TableCell>
+                <TableCell>
+                  {" "}
+                  <Skeleton className="w-full h-5" />
+                </TableCell>
+                <TableCell>
+                  {" "}
+                  <Skeleton className="w-full h-5" />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       ) : (
         <>
           <Table className="text-xs sm:text-sm">
