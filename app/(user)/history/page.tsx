@@ -23,7 +23,6 @@ export default function History({
     queryKey: ["history", searchParams.range],
     queryFn: async () => getHistory(searchParams.range),
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
   });
 
   return (
@@ -51,11 +50,11 @@ export default function History({
           <Table className="text-xs sm:text-sm">
             <TableHeader>
               <TableRow>
+                <TableHead></TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Cost/Amount</TableHead>
                 <TableHead>Deducted To</TableHead>
                 <TableHead>Total Savings</TableHead>
-                <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -71,7 +70,13 @@ export default function History({
                       // `}
                     >
                       <TableCell
-                        className={` ${
+                        className={`flex items-center justify-center `}
+                      >
+                        {(history.is_deleted && <FaTrash />) ||
+                          (history.is_edit && <FaPencilAlt />) || <FaPlus />}
+                      </TableCell>
+                      <TableCell
+                        className={`font-bold ${
                           history.is_expense
                             ? "text-destructive"
                             : "text-primary"
@@ -92,16 +97,6 @@ export default function History({
                       </TableCell>
                       <TableCell>
                         {usePhpPeso(history.savings_overall_total)}
-                      </TableCell>
-                      <TableCell
-                        className={`flex items-center justify-center ${
-                          (history.is_deleted && "text-destructive") ||
-                          (history.is_edit && "text-secondary") ||
-                          "text-primary"
-                        }`}
-                      >
-                        {(history.is_deleted && <FaTrash />) ||
-                          (history.is_edit && <FaPencilAlt />) || <FaPlus />}
                       </TableCell>
                     </TableRow>
                   );

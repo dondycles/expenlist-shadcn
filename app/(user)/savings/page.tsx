@@ -15,7 +15,6 @@ export default function Savings() {
     queryKey: ["savings"],
     queryFn: async () => getSavings(),
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
   });
 
   const total = _.sum(
