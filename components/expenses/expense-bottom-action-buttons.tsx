@@ -73,12 +73,14 @@ export default function ExpenseBottomActionButtons({
             <Button
               className="text-xs shadow "
               disabled={
-                !currentDate.match(
-                  new Date(searchParams.date).toLocaleDateString(
-                    "en-US",
-                    options
-                  )
-                )
+                searchParams.date
+                  ? !currentDate.match(
+                      new Date(searchParams.date).toLocaleDateString(
+                        "en-US",
+                        options
+                      )
+                    )
+                  : false
               }
               size={"sm"}
             >
