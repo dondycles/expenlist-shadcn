@@ -17,29 +17,33 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-interface MonthlyData {
-  jan: any[] | null;
-  feb: any[] | null;
-  mar: any[] | null;
-  apr: any[] | null;
-  may: any[] | null;
-  jun: any[] | null;
-  jul: any[] | null;
-  aug: any[] | null;
-  sep: any[] | null;
-  oct: any[] | null;
-  nov: any[] | null;
-  dec: any[] | null;
-  [key: string]: any[] | null; // Index signature
-}
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { getDailyExpenses } from "@/actions/analysis/getDailyExpenses";
 
 export default function Analysis() {
   var _ = require("lodash");
 
+  const [expensesState, setExpensesState] = useState<"monthly" | "daily">(
+    "monthly"
+  );
+
   const { data: expenses } = useQuery({
     queryKey: ["expensesanalysis"],
     queryFn: async () => getMonthlyExpenses(),
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: dailyexpenses } = useQuery({
+    queryKey: ["expensesanalysisdaily"],
+    queryFn: async () => getDailyExpenses(),
     refetchOnWindowFocus: false,
   });
 
@@ -79,13 +83,36 @@ export default function Analysis() {
       type: "savings",
     }),
   }));
+  const dailyExpense = dailyexpenses?.success.map((expense) => expense);
+  console.log(dailyexpenses?.success);
   return (
     <ScrollArea className="h-full">
-      <div className="w-full h-full space-y-4">
+      <div className="w-full h-full space-y-1">
         <Card>
           <CardHeader>
             <CardTitle className="font-bold text-primary">
-              Monthly Expenses
+              <Select>
+                <SelectTrigger defaultValue={"daily"} className="w-[180px]">
+                  <SelectValue placeholder="Monthly Expenses" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem
+                      onSelect={(e) => setExpensesState("monthly")}
+                      defaultChecked
+                      value="monthly"
+                    >
+                      Monthly Expenses
+                    </SelectItem>
+                    <SelectItem
+                      onSelect={(e) => setExpensesState("daily")}
+                      value="daily"
+                    >
+                      Daily Expenses
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -99,7 +126,7 @@ export default function Analysis() {
                   tickLine={false}
                   axisLine={false}
                 />
-                <Tooltip />
+                <Tooltip contentStyle={{ color: "#000000" }} />
                 <YAxis
                   stroke="#888888"
                   fontSize={12}
@@ -109,9 +136,8 @@ export default function Analysis() {
                 />
                 <Bar
                   dataKey="avg"
-                  fill="currentColor"
                   radius={[4, 4, 0, 0]}
-                  className="fill-primary"
+                  className="fill-primary "
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -125,16 +151,16 @@ export default function Analysis() {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer key={"savings"} width="100%" height={350}>
-              <BarChart data={eachMonthSavings}>
+              <BarChart data={dailyExpense}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
-                  dataKey="month"
+                  dataKey="name"
                   stroke="#888888"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
                 />
-                <Tooltip />
+                <Tooltip contentStyle={{ color: "#000000" }} />
                 <YAxis
                   stroke="#888888"
                   fontSize={12}
@@ -143,7 +169,7 @@ export default function Analysis() {
                   tickFormatter={(value) => `${usePhpPeso(value)}`}
                 />
                 <Bar
-                  dataKey="avg"
+                  dataKey="cost"
                   fill="currentColor"
                   radius={[4, 4, 0, 0]}
                   className="fill-primary"
