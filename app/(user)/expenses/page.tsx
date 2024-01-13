@@ -30,6 +30,7 @@ export default function Expenses({
   );
 
   useEffect(() => {
+    if (!date) return;
     route.push("/expenses?date=" + date);
   }, [date]);
 

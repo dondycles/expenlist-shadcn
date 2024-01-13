@@ -11,10 +11,7 @@ export const getExpenses = async (date: string | null) => {
   const { data, error } = await supabase
     .from("expenses")
     .select("* , savings(*)")
-    .eq(
-      "date",
-      date != "null" ? date : new Date().toLocaleDateString("en-US", options)
-    )
+    .eq("date", date ? date : new Date().toLocaleDateString("en-US", options))
     .order("created_at", { ascending: true });
 
   if (error) return { error: error };
