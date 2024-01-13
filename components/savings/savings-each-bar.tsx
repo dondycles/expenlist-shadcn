@@ -27,13 +27,14 @@ export default function SavingsEachBar({
   savings: any;
   isOptimistic?: boolean;
 }) {
+  const queryClient = useQueryClient();
+
   const [confirm, setConfirm] = useState(false);
+
   const [editedValue, setEditedValue] = useState({
     name: savings.name,
     amount: savings.amount,
   });
-
-  const [queryClient] = useState(() => useQueryClient());
 
   const delete_ = async () => {
     const deleteS = await deleteSavings(savings.id);
@@ -189,10 +190,6 @@ export default function SavingsEachBar({
           </>
         )}
       </div>
-      {/* {savings.expenses &&
-        savings.expenses.map((expense: any[any]) => {
-          return <p>{expense.name}</p>;
-        })} */}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+
 import { FaSpinner, FaTrash } from "react-icons/fa";
 import { Button } from "../ui/button";
 import { deleteExpense } from "@/actions/expense/delete";
@@ -24,7 +25,7 @@ export default function ExpenseEachBar({
   expense: any;
   isOptimistic?: boolean;
 }) {
-  const [queryClient] = useState(() => useQueryClient());
+  const queryClient = useQueryClient();
 
   const delete_ = async () => {
     const deleteE = await deleteExpense(expense.id);

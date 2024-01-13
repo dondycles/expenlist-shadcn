@@ -46,8 +46,8 @@ export default function History({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Array.from({ length: 10 }, () => (
-              <TableRow>
+            {Array.from({ length: 10 }, (_, i) => (
+              <TableRow key={i}>
                 <TableCell
                   className={`flex items-center justify-center `}
                 ></TableCell>

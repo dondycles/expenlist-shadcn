@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export const getExpenses = async (date: string | null) => {
+  console.log(date);
   const supabase = createServerActionClient({ cookies });
   const options = {
     timeZone: "Asia/Manila",
