@@ -1,6 +1,8 @@
 "use client";
 
 import { getMonthlyExpenses } from "@/actions/analysis/getMonthlyExpenses";
+import { getMonthlySavings } from "@/actions/analysis/getMonthlySavings";
+import { totalComputer } from "@/lib/totalComputer";
 import { usePhpPeso } from "@/lib/phpformatter";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -13,67 +15,144 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+interface MonthlyData {
+  jan: any[] | null;
+  feb: any[] | null;
+  mar: any[] | null;
+  apr: any[] | null;
+  may: any[] | null;
+  jun: any[] | null;
+  jul: any[] | null;
+  aug: any[] | null;
+  sep: any[] | null;
+  oct: any[] | null;
+  nov: any[] | null;
+  dec: any[] | null;
+  [key: string]: any[] | null; // Index signature
+}
 
 export default function Analysis() {
   var _ = require("lodash");
-  const { data, isLoading, isFetching } = useQuery({
-    queryKey: ["analysis"],
+
+  const { data: expenses } = useQuery({
+    queryKey: ["expensesanalysis"],
     queryFn: async () => getMonthlyExpenses(),
     refetchOnWindowFocus: false,
   });
 
-  const averageComputer = (data: any[] | null | undefined) => {
-    if (data === undefined) return 0;
-    if (!data) return 0;
-    const total = _.sum(data?.map((d: { cost: any }) => Number(d.cost)));
-    const average = total / data?.length;
+  const { data: savings } = useQuery({
+    queryKey: ["savingsanalysis"],
+    queryFn: async () => getMonthlySavings(),
+    refetchOnWindowFocus: false,
+  });
 
-    return average;
-  };
-
-  const eachMonth = [
-    { month: "Jan", avg: averageComputer(data?.success.jan) },
-    { month: "Feb", avg: averageComputer(data?.success.feb) },
-    { month: "Mar", avg: averageComputer(data?.success.mar) },
-    { month: "Apr", avg: averageComputer(data?.success.apr) },
-    { month: "May", avg: averageComputer(data?.success.may) },
-    { month: "Jun", avg: averageComputer(data?.success.jun) },
-    { month: "Jul", avg: averageComputer(data?.success.jul) },
-    { month: "Aug", avg: averageComputer(data?.success.aug) },
-    { month: "Sep", avg: averageComputer(data?.success.sep) },
-    { month: "Oct", avg: averageComputer(data?.success.oct) },
-    { month: "Nov", avg: averageComputer(data?.success.nov) },
-    { month: "Dec", avg: averageComputer(data?.success.dec) },
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
+  const eachMonthExpenses = months.map((month, i) => ({
+    month,
+    avg: totalComputer({
+      data: expenses?.success[i],
+      type: "expenses",
+    }),
+  }));
+
+  const eachMonthSavings = months.map((month, i) => ({
+    month,
+    avg: totalComputer({
+      data: savings?.success[i],
+      type: "savings",
+    }),
+  }));
   return (
-    <div className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto">
-      <ResponsiveContainer width="100%" height={350}>
-        <BarChart data={eachMonth}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="month"
-            stroke="#888888"
-            fontSize={12}
-            tickLine={false}
-            axisLine={false}
-          />
-          <Tooltip />
-          <YAxis
-            stroke="#888888"
-            fontSize={12}
-            tickLine={false}
-            axisLine={false}
-            tickFormatter={(value) => `${usePhpPeso(value)}`}
-          />
-          <Bar
-            dataKey="avg"
-            fill="currentColor"
-            radius={[4, 4, 0, 0]}
-            className="fill-primary"
-          />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    <ScrollArea className="h-full">
+      <div className="w-full h-full space-y-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-bold text-primary">
+              Monthly Expenses
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={350}>
+              <BarChart data={eachMonthExpenses}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="month"
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip />
+                <YAxis
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `${usePhpPeso(value)}`}
+                />
+                <Bar
+                  dataKey="avg"
+                  fill="currentColor"
+                  radius={[4, 4, 0, 0]}
+                  className="fill-primary"
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-bold text-primary">
+              Monthly Savings
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer key={"savings"} width="100%" height={350}>
+              <BarChart data={eachMonthSavings}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="month"
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip />
+                <YAxis
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `${usePhpPeso(value)}`}
+                />
+                <Bar
+                  dataKey="avg"
+                  fill="currentColor"
+                  radius={[4, 4, 0, 0]}
+                  className="fill-primary"
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+    </ScrollArea>
   );
 }
