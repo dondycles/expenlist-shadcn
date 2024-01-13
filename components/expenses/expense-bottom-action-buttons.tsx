@@ -1,8 +1,7 @@
 "use client";
 
 import { FaPlus } from "react-icons/fa";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -47,7 +46,11 @@ export default function ExpenseBottomActionButtons({
             )}
           >
             <CalendarIcon className="w-4 h-4 mx-2" />
-            {date ? format(date, "PPP") : <span>Pick a date</span>}
+            {date ? (
+              new Date(date).toLocaleDateString("en-US", options)
+            ) : (
+              <span>Pick a date</span>
+            )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="flex-1 p-0 ">

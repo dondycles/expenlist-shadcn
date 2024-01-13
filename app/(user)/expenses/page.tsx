@@ -8,8 +8,6 @@ import { usePhpPeso } from "@/lib/phpformatter";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export const revalidate = 0;
-
 export default function Expenses({
   searchParams,
 }: {
