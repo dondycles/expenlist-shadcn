@@ -14,16 +14,12 @@ import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { getHistory } from "@/actions/history/get";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toPhDate } from "@/lib/phdate";
 export default function History({
   searchParams,
 }: {
   searchParams: { range: string; last: string };
 }) {
-  const options = {
-    timeZone: "Asia/Manila",
-    hour12: false, // Use 24-hour format
-  };
-
   const { data, isLoading } = useQuery({
     queryKey: ["history", searchParams.range],
     queryFn: async () =>
@@ -121,12 +117,7 @@ export default function History({
                       <TableCell>
                         {usePhpPeso(history.savings_overall_total)}
                       </TableCell>
-                      <TableCell>
-                        {new Date(String(history.created_at)).toLocaleString(
-                          "en-US",
-                          options
-                        )}
-                      </TableCell>
+                      <TableCell>{toPhDate(history.created_at)}</TableCell>
                     </TableRow>
                   );
                 })}

@@ -7,13 +7,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { usePhpPeso } from "@/lib/phpformatter";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toPhDate } from "@/lib/phdate";
 
 export default function Expenses({
   searchParams,
 }: {
   searchParams: { date: string };
 }) {
-  const [date, setDate] = useState<string | null>(null);
+  const [date, setDate] = useState<string>(toPhDate());
   const route = useRouter();
   var _ = require("lodash");
   const [optimisticUpdate, setOptimisticUpdate] = useState();
@@ -28,7 +29,6 @@ export default function Expenses({
   );
 
   useEffect(() => {
-    if (!date) return;
     route.push("/expenses?date=" + date);
   }, [date]);
 
@@ -50,7 +50,8 @@ export default function Expenses({
         />
       )}
       <ExpenseBottomActionButtons
-        setDate_={(date) => setDate(date)}
+        setDate={(date) => setDate(date)}
+        date={date}
         setOptimistic={(expense) => setOptimisticUpdate(expense)}
         searchParams={searchParams}
       >

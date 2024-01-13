@@ -14,28 +14,27 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ExpenseAddForm } from "./expense-add-form";
+import { toPhDate } from "@/lib/phdate";
 
 export default function ExpenseBottomActionButtons({
   children,
   searchParams,
   setOptimistic,
-  setDate_,
+  date,
+  setDate,
 }: {
   children: React.ReactNode;
   searchParams: { date: string };
   setOptimistic: (variables: any | null) => void;
-  setDate_: (date: string) => void;
+  setDate: (date: string) => void;
+  date: string;
 }) {
-  const options = {
-    timeZone: "Asia/Manila",
-    hour12: false, // Use 24-hour format
-  };
-  const currentDate = new Date().toLocaleDateString("en-US", options);
-  const [date, setDate] = useState<Date | string>(new Date());
+  const currentDate = toPhDate();
+  const [openCalendar, setOpenCalendar] = useState(false);
 
   return (
     <div className="flex flex-row items-center justify-between w-full gap-1 bg-primary/25 rounded-[0.5rem] p-1 shadow">
-      <Popover>
+      <Popover open={openCalendar} onOpenChange={setOpenCalendar}>
         <PopoverTrigger asChild className="p-0">
           <Button
             size={"sm"}
@@ -46,22 +45,17 @@ export default function ExpenseBottomActionButtons({
             )}
           >
             <CalendarIcon className="w-4 h-4 mx-2" />
-            {date ? (
-              new Date(date).toLocaleDateString("en-US", options)
-            ) : (
-              <span>Pick a date</span>
-            )}
+            {date ? format(date, "PPP") : <span>Pick a date</span>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="flex-1 p-0 ">
           <Calendar
             mode="single"
-            selected={date as Date}
+            selected={new Date(date)}
             onSelect={(e) => {
-              setDate(new Date(e!).toLocaleDateString("en-US", options));
-              setDate_(new Date(e!).toLocaleDateString("en-US", options));
+              setDate(toPhDate(e));
+              setOpenCalendar(false);
             }}
-            initialFocus
           />
         </PopoverContent>
       </Popover>
@@ -72,16 +66,7 @@ export default function ExpenseBottomActionButtons({
           <PopoverTrigger asChild>
             <Button
               className="text-xs shadow "
-              disabled={
-                searchParams.date
-                  ? !currentDate.match(
-                      new Date(searchParams.date).toLocaleDateString(
-                        "en-US",
-                        options
-                      )
-                    )
-                  : false
-              }
+              disabled={!currentDate.match(toPhDate(searchParams.date))}
               size={"sm"}
             >
               <FaPlus />
