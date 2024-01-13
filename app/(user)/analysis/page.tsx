@@ -16,7 +16,6 @@ import {
 
 export default function Analysis() {
   var _ = require("lodash");
-  const [eachMonth, setEachMonth] = useState<any[]>();
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ["analysis"],
     queryFn: async () => getMonthlyExpenses(),
@@ -32,23 +31,20 @@ export default function Analysis() {
     return average;
   };
 
-  useEffect(() => {
-    if (isFetching) return;
-    setEachMonth([
-      { month: "Jan", avg: averageComputer(data?.success.jan) },
-      { month: "Feb", avg: averageComputer(data?.success.feb) },
-      { month: "Mar", avg: averageComputer(data?.success.mar) },
-      { month: "Apr", avg: averageComputer(data?.success.apr) },
-      { month: "May", avg: averageComputer(data?.success.may) },
-      { month: "Jun", avg: averageComputer(data?.success.jun) },
-      { month: "Jul", avg: averageComputer(data?.success.jul) },
-      { month: "Aug", avg: averageComputer(data?.success.aug) },
-      { month: "Sep", avg: averageComputer(data?.success.sep) },
-      { month: "Oct", avg: averageComputer(data?.success.oct) },
-      { month: "Nov", avg: averageComputer(data?.success.nov) },
-      { month: "Dec", avg: averageComputer(data?.success.dec) },
-    ]);
-  }, [isFetching]);
+  const eachMonth = [
+    { month: "Jan", avg: averageComputer(data?.success.jan) },
+    { month: "Feb", avg: averageComputer(data?.success.feb) },
+    { month: "Mar", avg: averageComputer(data?.success.mar) },
+    { month: "Apr", avg: averageComputer(data?.success.apr) },
+    { month: "May", avg: averageComputer(data?.success.may) },
+    { month: "Jun", avg: averageComputer(data?.success.jun) },
+    { month: "Jul", avg: averageComputer(data?.success.jul) },
+    { month: "Aug", avg: averageComputer(data?.success.aug) },
+    { month: "Sep", avg: averageComputer(data?.success.sep) },
+    { month: "Oct", avg: averageComputer(data?.success.oct) },
+    { month: "Nov", avg: averageComputer(data?.success.nov) },
+    { month: "Dec", avg: averageComputer(data?.success.dec) },
+  ];
 
   return (
     <div className="flex flex-col w-full h-full max-h-full gap-2 overflow-auto">
