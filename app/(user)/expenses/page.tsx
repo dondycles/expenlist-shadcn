@@ -5,15 +5,21 @@ import { useQuery } from "@tanstack/react-query";
 import { getExpenses } from "@/actions/expense/get";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePhpPeso } from "@/lib/phpformatter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+export const revalidate = 0;
+
 export default function Expenses({
   searchParams,
 }: {
   searchParams: { date: string };
 }) {
+  const [date, setDate] = useState<string | null>(null);
+  const route = useRouter();
   var _ = require("lodash");
   const [optimisticUpdate, setOptimisticUpdate] = useState();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, status } = useQuery({
     queryKey: ["expenses", searchParams.date],
     queryFn: async () => getExpenses(searchParams.date),
     refetchOnWindowFocus: false,
@@ -22,6 +28,10 @@ export default function Expenses({
   const total = _.sum(
     data && data.success?.map((expense: { cost: any }) => Number(expense.cost))
   );
+
+  useEffect(() => {
+    route.push("/expenses?date=" + date);
+  }, [date]);
 
   return (
     <main className="flex flex-col w-full h-full max-h-full gap-1 overflow-auto ">
@@ -41,6 +51,7 @@ export default function Expenses({
         />
       )}
       <ExpenseBottomActionButtons
+        setDate_={(date) => setDate(date)}
         setOptimistic={(expense) => setOptimisticUpdate(expense)}
         searchParams={searchParams}
       >

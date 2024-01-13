@@ -20,22 +20,19 @@ export default function ExpenseBottomActionButtons({
   children,
   searchParams,
   setOptimistic,
+  setDate_,
 }: {
   children: React.ReactNode;
   searchParams: { date: string };
   setOptimistic: (variables: any | null) => void;
+  setDate_: (date: string) => void;
 }) {
-  const route = useRouter();
   const options = {
     timeZone: "Asia/Manila",
     hour12: false, // Use 24-hour format
   };
-  const [date, setDate] = useState<Date>(new Date());
-  const currentDate = new Date();
-
-  useEffect(() => {
-    route.push("/expenses?date=" + date.toLocaleDateString("en-US", options));
-  }, [date]);
+  const currentDate = new Date().toLocaleDateString("en-US", options);
+  const [date, setDate] = useState<Date | string>(new Date());
 
   return (
     <div className="flex flex-row items-center justify-between w-full gap-1 bg-primary/25 rounded-[0.5rem] p-1 shadow">
@@ -56,9 +53,10 @@ export default function ExpenseBottomActionButtons({
         <PopoverContent className="flex-1 p-0 ">
           <Calendar
             mode="single"
-            selected={date}
+            selected={date as Date}
             onSelect={(e) => {
-              setDate(new Date(e!.toLocaleString("en-US", options)));
+              setDate(new Date(e!).toLocaleDateString("en-US", options));
+              setDate_(new Date(e!).toLocaleDateString("en-US", options));
             }}
             initialFocus
           />
@@ -72,9 +70,12 @@ export default function ExpenseBottomActionButtons({
             <Button
               className="text-xs shadow "
               disabled={
-                !currentDate
-                  .toLocaleDateString()
-                  .match(new Date(searchParams.date).toLocaleDateString())
+                !currentDate.match(
+                  new Date(searchParams.date).toLocaleDateString(
+                    "en-US",
+                    options
+                  )
+                )
               }
               size={"sm"}
             >
@@ -88,7 +89,6 @@ export default function ExpenseBottomActionButtons({
           </PopoverContent>
         </Popover>
       </div>
-      {/* Add Button and Total is in the List Page */}
     </div>
   );
 }
