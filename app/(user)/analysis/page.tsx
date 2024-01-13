@@ -83,99 +83,86 @@ export default function Analysis() {
       type: "savings",
     }),
   }));
-  const dailyExpense = dailyexpenses?.success.map((expense) => expense);
-  console.log(dailyexpenses?.success);
+  const dailyExpense = dailyexpenses?.success!.map((expense) => expense);
   return (
     <ScrollArea className="h-full">
       <div className="w-full h-full space-y-1">
         <Card>
           <CardHeader>
             <CardTitle className="font-bold text-primary">
-              <Select>
+              <Select
+                onValueChange={(e: "monthly" | "daily") => setExpensesState(e)}
+              >
                 <SelectTrigger defaultValue={"daily"} className="w-[180px]">
                   <SelectValue placeholder="Monthly Expenses" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem
-                      onSelect={(e) => setExpensesState("monthly")}
-                      defaultChecked
-                      value="monthly"
-                    >
+                    <SelectItem defaultChecked value="monthly">
                       Monthly Expenses
                     </SelectItem>
-                    <SelectItem
-                      onSelect={(e) => setExpensesState("daily")}
-                      value="daily"
-                    >
-                      Daily Expenses
-                    </SelectItem>
+                    <SelectItem value="daily">Daily Expenses</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={350}>
-              <BarChart data={eachMonthExpenses}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="month"
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <Tooltip contentStyle={{ color: "#000000" }} />
-                <YAxis
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value) => `${usePhpPeso(value)}`}
-                />
-                <Bar
-                  dataKey="avg"
-                  radius={[4, 4, 0, 0]}
-                  className="fill-primary "
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-bold text-primary">
-              Monthly Savings
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer key={"savings"} width="100%" height={350}>
-              <BarChart data={dailyExpense}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="name"
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <Tooltip contentStyle={{ color: "#000000" }} />
-                <YAxis
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value) => `${usePhpPeso(value)}`}
-                />
-                <Bar
-                  dataKey="cost"
-                  fill="currentColor"
-                  radius={[4, 4, 0, 0]}
-                  className="fill-primary"
-                />
-              </BarChart>
-            </ResponsiveContainer>
+            {expensesState === "monthly" && (
+              <ResponsiveContainer width="100%" height={350}>
+                <BarChart data={eachMonthExpenses}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="month"
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <Tooltip contentStyle={{ color: "#000000" }} />
+                  <YAxis
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    tickFormatter={(value) => `${usePhpPeso(value)}`}
+                  />
+                  <Bar
+                    dataKey="avg"
+                    radius={[4, 4, 0, 0]}
+                    className="fill-primary "
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+            {expensesState === "daily" && (
+              <ResponsiveContainer key={"savings"} width="100%" height={350}>
+                <BarChart data={dailyExpense}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="name"
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <Tooltip contentStyle={{ color: "#000000" }} />
+                  <YAxis
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    tickFormatter={(value) => `${usePhpPeso(value)}`}
+                  />
+                  <Bar
+                    dataKey="cost"
+                    fill="currentColor"
+                    radius={[4, 4, 0, 0]}
+                    className="fill-primary"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
           </CardContent>
         </Card>
       </div>
