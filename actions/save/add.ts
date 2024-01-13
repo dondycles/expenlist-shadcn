@@ -1,4 +1,5 @@
 "use server";
+import { toPhMmYy } from "@/lib/phmmyy";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -13,7 +14,7 @@ export const addSavings = async ({
   const supabase = createServerActionClient({ cookies });
   const { error, data } = await supabase
     .from("savings")
-    .insert([{ amount: amount, name: name }])
+    .insert([{ amount: amount, name: name, mmyy: toPhMmYy() }])
     .select()
     .single();
 

@@ -1,8 +1,8 @@
 "use server";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { getTotal } from "../getTotal";
+import { getTotal } from "../save/getTotal";
+import { toPhMmYy } from "@/lib/phmmyy";
 export const addHistory = async ({
   expense_data,
   savings_data,
@@ -31,6 +31,7 @@ export const addHistory = async ({
       name: expense_data ? expense_data.name : savings_data.name,
       savings_overall_total: total.success,
       is_deleted: is_deleted ? true : false,
+      mmyy: toPhMmYy(),
     },
   ]);
 

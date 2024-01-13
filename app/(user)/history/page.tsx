@@ -88,9 +88,6 @@ export default function History({
                       </TableCell>
                       <TableCell>{usePhpPeso(history.amount)}</TableCell>
                       <TableCell>
-                        {/* {(history.is_deleted && "Delete") ||
-                    (history.is_edit && "Edited") ||
-                    "Added"} */}
                         {history.is_expense &&
                           history.savings &&
                           history.savings.name +
@@ -147,7 +144,6 @@ export default function History({
                 )}
               </>
             )}
-
             <div className="flex flex-row gap-1 ml-auto mr-0">
               {searchParams.last === "false" && (
                 <Button size={"sm"} asChild>

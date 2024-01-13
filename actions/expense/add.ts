@@ -2,6 +2,7 @@
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { toPhDate } from "@/lib/phdate";
+import { toPhMmYy } from "@/lib/phmmyy";
 export const addExpense = async ({
   name,
   cost,
@@ -21,6 +22,7 @@ export const addExpense = async ({
         name: name,
         date: toPhDate(),
         deduct_to: savings_data ? savings_data.id : null,
+        mmyy: toPhMmYy(),
       },
     ])
     .select("*")
