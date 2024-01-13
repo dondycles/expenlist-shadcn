@@ -3,35 +3,14 @@ import { useState } from "react";
 import { AuthLogInForm } from "@/components/auth/auth-login-form";
 import { AuthSignUpForm } from "@/components/auth/auth-signup-form";
 import { FaPencilAlt } from "react-icons/fa";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Home, HomeIcon, LogIn } from "lucide-react";
+import { Home, LogIn } from "lucide-react";
 
 export default function Auth() {
   const [mode, setMode] = useState<"login" | "signup">("signup");
-  const route = useRouter();
   return (
     <main className="flex flex-col w-full h-full  py-4 px-4 md:px-32 xl:px-64 2xl:px-[512px]">
-      {/* <Tabs defaultValue="login" className="w-[400px] space-y-4 m-auto">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="login">Log In</TabsTrigger>
-          <TabsTrigger value="signup">Sign Up</TabsTrigger>
-        </TabsList>
-        <div className="w-full p-2 rounded-[0.5rem] text-6xl text-center text-white bg-primary flex items-center justify-center">
-          <FaPencilAlt />
-        </div>
-        <p className="text-sm">
-          Be smarter and start listing all of your expenses.{" "}
-        </p>
-        <TabsContent value="login">
-          <AuthLogInForm />
-        </TabsContent>
-        <TabsContent value="signup">
-          <AuthSignUpForm />
-        </TabsContent>
-      </Tabs> */}
       <div className="flex justify-between">
         <Button variant={"outline"} asChild className="w-fit">
           <Link href={"/"}>

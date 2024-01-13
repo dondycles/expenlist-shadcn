@@ -3,11 +3,11 @@ import ExpenseBottomActionButtons from "@/components/expenses/expense-bottom-act
 import ExpenseScrollable from "@/components/expenses/expense-scrollable";
 import { useQuery } from "@tanstack/react-query";
 import { getExpenses } from "@/actions/expense/get";
-import { Skeleton } from "@/components/ui/skeleton";
 import { usePhpPeso } from "@/lib/phpformatter";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toPhDate } from "@/lib/phdate";
+import EachBarSkeleton from "@/components/each-bar-skeleton";
 
 export default function Expenses({
   searchParams,
@@ -18,7 +18,7 @@ export default function Expenses({
   const route = useRouter();
   var _ = require("lodash");
   const [optimisticUpdate, setOptimisticUpdate] = useState();
-  const { data, isLoading, status } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["expenses", searchParams.date],
     queryFn: async () => getExpenses(searchParams.date),
     refetchOnWindowFocus: false,
@@ -37,10 +37,7 @@ export default function Expenses({
       {isLoading ? (
         <div className="flex flex-col h-full gap-1">
           {Array.from({ length: 10 }, (_, i) => (
-            <Skeleton key={i} className="flex flex-row w-full h-12 gap-1 p-1">
-              <Skeleton className="flex-1 h-full bg-white/5" />
-              <Skeleton className="h-full aspect-square bg-destructive/50" />
-            </Skeleton>
+            <EachBarSkeleton type="expenses" key={i} />
           ))}
         </div>
       ) : (

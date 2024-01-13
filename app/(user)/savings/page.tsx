@@ -4,9 +4,8 @@ import SavingsScrollable from "@/components/savings/savings-scrollable";
 import { useQuery } from "@tanstack/react-query";
 import { getSavings } from "@/actions/save/get";
 import { useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import { usePhpPeso } from "@/lib/phpformatter";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import EachBarSkeleton from "@/components/each-bar-skeleton";
 
 export default function Savings() {
   var _ = require("lodash");
@@ -27,11 +26,7 @@ export default function Savings() {
       {isLoading ? (
         <div className="flex flex-col h-full gap-2">
           {Array.from({ length: 10 }, (_, i) => (
-            <Skeleton key={i} className="flex flex-row w-full h-12 gap-1 p-1">
-              <Skeleton className="flex-1 h-full bg-white/5" />
-              <Skeleton className="h-full aspect-square bg-black/50" />
-              <Skeleton className="h-full aspect-square bg-destructive/50" />
-            </Skeleton>
+            <EachBarSkeleton type="savings" key={i} />
           ))}
         </div>
       ) : (
