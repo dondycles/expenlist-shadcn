@@ -70,7 +70,7 @@ export default function Analysis() {
 
   const eachMonthExpenses = months.map((month, i) => ({
     month,
-    avg: totalComputer({
+    total: totalComputer({
       data: expenses?.success[i],
       type: "expenses",
     }),
@@ -128,7 +128,7 @@ export default function Analysis() {
                     tickFormatter={(value) => `${usePhpPeso(value)}`}
                   />
                   <Bar
-                    dataKey="avg"
+                    dataKey="total"
                     radius={[4, 4, 0, 0]}
                     className="fill-primary "
                   />
