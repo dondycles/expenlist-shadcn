@@ -44,28 +44,11 @@ export default function History({
           <TableBody>
             {Array.from({ length: 10 }, (_, i) => (
               <TableRow key={i}>
-                <TableCell
-                  className={`flex items-center justify-center `}
-                ></TableCell>
-                <TableCell>
-                  <Skeleton className="w-full h-5" />
-                </TableCell>
-                <TableCell>
-                  {" "}
-                  <Skeleton className="w-full h-5" />
-                </TableCell>
-                <TableCell>
-                  {" "}
-                  <Skeleton className="w-full h-5" />
-                </TableCell>
-                <TableCell>
-                  {" "}
-                  <Skeleton className="w-full h-5" />
-                </TableCell>
-                <TableCell>
-                  {" "}
-                  <Skeleton className="w-full h-5" />
-                </TableCell>
+                {Array.from({ length: 6 }, (_, i) => (
+                  <TableCell key={i}>
+                    <Skeleton className="w-full h-5" />
+                  </TableCell>
+                ))}
               </TableRow>
             ))}
           </TableBody>
