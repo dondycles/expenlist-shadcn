@@ -5,11 +5,15 @@ import { getMonthlySavings } from "@/actions/analysis/getMonthlySavings";
 import { totalComputer } from "@/lib/totalComputer";
 import { usePhpPeso } from "@/lib/phpformatter";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -83,7 +87,25 @@ export default function Analysis() {
       type: "savings",
     }),
   }));
-  const dailyExpense = dailyexpenses?.success!.map((expense) => expense);
+  const dailyExpense = dailyexpenses?.success!.map((expense) => ({
+    cost: Number(expense.cost),
+    name: expense.name,
+  }));
+
+  const generateColors = useCallback(
+    (count: number) => {
+      const colors = [];
+      for (let i = 0; i < count; i++) {
+        const randomColor =
+          "#" + Math.floor(Math.random() * 16777215).toString(16);
+        colors.push(randomColor);
+      }
+      return colors;
+    },
+    [dailyExpense!.length]
+  );
+
+  const COLORS = generateColors(dailyExpense!.length);
   return (
     <ScrollArea className="h-full">
       <div className="w-full h-full space-y-1">
@@ -93,7 +115,7 @@ export default function Analysis() {
               <Select
                 onValueChange={(e: "monthly" | "daily") => setExpensesState(e)}
               >
-                <SelectTrigger defaultValue={"daily"} className="w-[180px]">
+                <SelectTrigger defaultValue={"daily"} className="w-full">
                   <SelectValue placeholder="Monthly Expenses" />
                 </SelectTrigger>
                 <SelectContent>
@@ -101,7 +123,7 @@ export default function Analysis() {
                     <SelectItem defaultChecked value="monthly">
                       Monthly Expenses
                     </SelectItem>
-                    <SelectItem value="daily">Daily Expenses</SelectItem>
+                    <SelectItem value="daily">This Month's Expenses</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -135,9 +157,9 @@ export default function Analysis() {
                 </BarChart>
               </ResponsiveContainer>
             )}
-            {expensesState === "daily" && (
-              <ResponsiveContainer key={"savings"} width="100%" height={350}>
-                <BarChart data={dailyExpense}>
+            {expensesState === "daily" && dailyExpense && (
+              <ResponsiveContainer key={"daily"} width="100%" height={350}>
+                {/* <BarChart data={dailyExpense}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis
                     dataKey="name"
@@ -160,7 +182,27 @@ export default function Analysis() {
                     radius={[4, 4, 0, 0]}
                     className="fill-primary"
                   />
-                </BarChart>
+                </BarChart> */}
+                <PieChart width={400} height={400}>
+                  <Tooltip />
+                  <Legend />
+                  <Pie
+                    data={dailyExpense}
+                    cx="50%"
+                    cy="50%"
+                    fill="#000000"
+                    dataKey="cost"
+                    innerRadius={90}
+                    isAnimationActive={false}
+                  >
+                    {dailyExpense.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
               </ResponsiveContainer>
             )}
           </CardContent>
