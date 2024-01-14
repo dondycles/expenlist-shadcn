@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getDailyExpenses } from "@/actions/analysis/getDailyExpenses";
+import { colors } from "@/lib/colors";
 
 export default function Analysis() {
   var _ = require("lodash");
@@ -87,25 +88,12 @@ export default function Analysis() {
       type: "savings",
     }),
   }));
+
   const dailyExpense = dailyexpenses?.success!.map((expense) => ({
     cost: Number(expense.cost),
     name: expense.name,
   }));
 
-  const generateColors = useCallback(
-    (count: number) => {
-      const colors = [];
-      for (let i = 0; i < count; i++) {
-        const randomColor =
-          "#" + Math.floor(Math.random() * 16777215).toString(16);
-        colors.push(randomColor);
-      }
-      return colors;
-    },
-    [dailyExpense!.length]
-  );
-
-  const COLORS = generateColors(dailyExpense!.length);
   return (
     <ScrollArea className="h-full">
       <div className="w-full h-full space-y-1">
@@ -196,10 +184,7 @@ export default function Analysis() {
                     isAnimationActive={false}
                   >
                     {dailyExpense.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
+                      <Cell key={`cell-${index}`} fill={colors[index]} />
                     ))}
                   </Pie>
                 </PieChart>
