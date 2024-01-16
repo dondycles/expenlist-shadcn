@@ -107,54 +107,66 @@ export default function Analysis() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {expensesState === "monthly" && (
-              <ResponsiveContainer key={"monthly"} width="100%" height={350}>
-                <BarChart data={monthlyExpenses}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="month"
-                    stroke="#888888"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <Tooltip contentStyle={{ color: "#000000" }} />
-                  <YAxis
-                    stroke="#888888"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                    tickFormatter={(value) => `${usePhpPeso(value)}`}
-                  />
-                  <Bar
-                    dataKey="total"
-                    radius={[4, 4, 0, 0]}
-                    className="fill-primary "
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            )}
-            {expensesState === "thismonth" && thisMonthsExpenses && (
-              <ResponsiveContainer key={"thismonth"} width="100%" height={350}>
-                <PieChart width={400} height={400}>
-                  <Tooltip />
-                  <Legend />
-                  <Pie
-                    data={thisMonthsExpenses}
-                    cx="50%"
-                    cy="50%"
-                    fill="#000000"
-                    dataKey="cost"
-                    innerRadius={10}
-                    isAnimationActive={false}
-                  >
-                    {thisMonthsExpenses.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={colors[index]} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-            )}
+            {expensesState === "monthly" ? (
+              isMonthlyFetching ? (
+                <p>Loading...</p>
+              ) : (
+                <ResponsiveContainer key={"monthly"} width="100%" height={350}>
+                  <BarChart data={monthlyExpenses}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="month"
+                      stroke="#888888"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <Tooltip contentStyle={{ color: "#000000" }} />
+                    <YAxis
+                      stroke="#888888"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                      tickFormatter={(value) => `${usePhpPeso(value)}`}
+                    />
+                    <Bar
+                      dataKey="total"
+                      radius={[4, 4, 0, 0]}
+                      className="fill-primary "
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              )
+            ) : null}
+            {expensesState === "thismonth" ? (
+              isThisMonthFetching ? (
+                <p>Loading...</p>
+              ) : (
+                <ResponsiveContainer
+                  key={"thismonth"}
+                  width="100%"
+                  height={350}
+                >
+                  <PieChart width={400} height={400}>
+                    <Tooltip />
+                    <Legend />
+                    <Pie
+                      data={thisMonthsExpenses}
+                      cx="50%"
+                      cy="50%"
+                      fill="#000000"
+                      dataKey="cost"
+                      innerRadius={10}
+                      isAnimationActive={false}
+                    >
+                      {thisMonthsExpenses?.map((_, index) => (
+                        <Cell key={`cell-${index}`} fill={colors[index]} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              )
+            ) : null}
           </CardContent>
         </Card>
       </div>
