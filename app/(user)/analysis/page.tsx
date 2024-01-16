@@ -180,7 +180,7 @@ export default function Analysis() {
                     cy="50%"
                     fill="#000000"
                     dataKey="cost"
-                    innerRadius={90}
+                    innerRadius={10}
                     isAnimationActive={false}
                   >
                     {dailyExpense.map((entry, index) => (
