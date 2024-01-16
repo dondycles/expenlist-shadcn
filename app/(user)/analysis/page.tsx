@@ -26,7 +26,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -36,25 +35,19 @@ import { colors } from "@/lib/colors";
 export default function Analysis() {
   var _ = require("lodash");
 
-  const [expensesState, setExpensesState] = useState<"monthly" | "daily">(
+  const [expensesState, setExpensesState] = useState<"monthly" | "thismonth">(
     "monthly"
   );
 
-  const { data: expenses } = useQuery({
+  const { data: monthly, isFetching: isMonthlyFetching } = useQuery({
     queryKey: ["expensesanalysis"],
     queryFn: async () => getMonthlyExpenses(),
     refetchOnWindowFocus: false,
   });
 
-  const { data: dailyexpenses } = useQuery({
+  const { data: thismonth, isFetching: isThisMonthFetching } = useQuery({
     queryKey: ["expensesanalysisdaily"],
     queryFn: async () => getDailyExpenses(),
-    refetchOnWindowFocus: false,
-  });
-
-  const { data: savings } = useQuery({
-    queryKey: ["savingsanalysis"],
-    queryFn: async () => getMonthlySavings(),
     refetchOnWindowFocus: false,
   });
 
@@ -73,23 +66,15 @@ export default function Analysis() {
     "Dec",
   ];
 
-  const eachMonthExpenses = months.map((month, i) => ({
+  const monthlyExpenses = months.map((month, i) => ({
     month,
     total: totalComputer({
-      data: expenses?.success[i],
+      data: monthly?.success[i],
       type: "expenses",
     }),
   }));
 
-  const eachMonthSavings = months.map((month, i) => ({
-    month,
-    avg: totalComputer({
-      data: savings?.success[i],
-      type: "savings",
-    }),
-  }));
-
-  const dailyExpense = dailyexpenses?.success!.map((expense) => ({
+  const thisMonthsExpenses = thismonth?.success!.map((expense) => ({
     cost: Number(expense.cost),
     name: expense.name,
   }));
@@ -101,17 +86,21 @@ export default function Analysis() {
           <CardHeader>
             <CardTitle className="font-bold text-primary">
               <Select
-                onValueChange={(e: "monthly" | "daily") => setExpensesState(e)}
+                onValueChange={(e: "monthly" | "thismonth") =>
+                  setExpensesState(e)
+                }
               >
-                <SelectTrigger defaultValue={"daily"} className="w-full">
-                  <SelectValue placeholder="Monthly Expenses" />
+                <SelectTrigger defaultValue={"monthly"} className="w-full">
+                  <SelectValue placeholder="This Year's Expenses" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     <SelectItem defaultChecked value="monthly">
-                      Monthly Expenses
+                      This Year's Expenses
                     </SelectItem>
-                    <SelectItem value="daily">This Month's Expenses</SelectItem>
+                    <SelectItem value="thismonth">
+                      This Month's Expenses
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -119,8 +108,8 @@ export default function Analysis() {
           </CardHeader>
           <CardContent>
             {expensesState === "monthly" && (
-              <ResponsiveContainer width="100%" height={350}>
-                <BarChart data={eachMonthExpenses}>
+              <ResponsiveContainer key={"monthly"} width="100%" height={350}>
+                <BarChart data={monthlyExpenses}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis
                     dataKey="month"
@@ -145,37 +134,13 @@ export default function Analysis() {
                 </BarChart>
               </ResponsiveContainer>
             )}
-            {expensesState === "daily" && dailyExpense && (
-              <ResponsiveContainer key={"daily"} width="100%" height={350}>
-                {/* <BarChart data={dailyExpense}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="name"
-                    stroke="#888888"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <Tooltip contentStyle={{ color: "#000000" }} />
-                  <YAxis
-                    stroke="#888888"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                    tickFormatter={(value) => `${usePhpPeso(value)}`}
-                  />
-                  <Bar
-                    dataKey="cost"
-                    fill="currentColor"
-                    radius={[4, 4, 0, 0]}
-                    className="fill-primary"
-                  />
-                </BarChart> */}
+            {expensesState === "thismonth" && thisMonthsExpenses && (
+              <ResponsiveContainer key={"thismonth"} width="100%" height={350}>
                 <PieChart width={400} height={400}>
                   <Tooltip />
                   <Legend />
                   <Pie
-                    data={dailyExpense}
+                    data={thisMonthsExpenses}
                     cx="50%"
                     cy="50%"
                     fill="#000000"
@@ -183,7 +148,7 @@ export default function Analysis() {
                     innerRadius={10}
                     isAnimationActive={false}
                   >
-                    {dailyExpense.map((entry, index) => (
+                    {thisMonthsExpenses.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={colors[index]} />
                     ))}
                   </Pie>
