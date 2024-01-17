@@ -45,7 +45,7 @@ export default function Analysis() {
     "Dec",
   ];
 
-  const [expensesState, setExpensesState] = useState<"monthly" | "thismonth">(
+  const [expensesState, setExpensesState] = useState<"monthly" | "daily">(
     "monthly"
   );
 
@@ -104,9 +104,7 @@ export default function Analysis() {
           <CardHeader>
             <CardTitle className="font-bold text-primary">
               <Select
-                onValueChange={(e: "monthly" | "thismonth") =>
-                  setExpensesState(e)
-                }
+                onValueChange={(e: "monthly" | "daily") => setExpensesState(e)}
               >
                 <SelectTrigger defaultValue={"monthly"} className="w-full">
                   <SelectValue placeholder="This Year's Expenses" />
@@ -114,11 +112,9 @@ export default function Analysis() {
                 <SelectContent>
                   <SelectGroup>
                     <SelectItem defaultChecked value="monthly">
-                      This Year's Expenses
+                      Monthly Expenses
                     </SelectItem>
-                    <SelectItem value="thismonth">
-                      This Month's Expenses
-                    </SelectItem>
+                    <SelectItem value="daily">Daily Expenses</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -161,7 +157,7 @@ export default function Analysis() {
                 </ResponsiveContainer>
               )
             ) : null}
-            {expensesState === "thismonth" ? (
+            {expensesState === "daily" ? (
               isThisMonthFetching ? (
                 <div className="flex flex-row gap-2">
                   <p>Calculating</p>
