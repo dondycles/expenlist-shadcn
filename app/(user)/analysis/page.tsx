@@ -14,7 +14,14 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
@@ -28,7 +35,10 @@ import { getDailyExpenses } from "@/actions/analysis/getDailyExpenses";
 import { toPhDate } from "@/lib/phdate";
 import { daysInEachMonth } from "@/lib/monthsdayscounter";
 import { FaSpinner } from "react-icons/fa";
-
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 export default function Analysis() {
   const months = [
     "Jan",
@@ -100,7 +110,7 @@ export default function Analysis() {
   return (
     <ScrollArea className="h-full">
       <div className="w-full h-full space-y-1">
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle className="font-bold text-primary">
               <Select
@@ -193,6 +203,101 @@ export default function Analysis() {
                 </ResponsiveContainer>
               )
             ) : null}
+          </CardContent>
+        </Card> */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-bold text-primary">
+              Expenses Analysis
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="monthly" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mx-auto">
+                <TabsTrigger value="monthly">Monthly</TabsTrigger>
+                <TabsTrigger value="daily">Daily</TabsTrigger>
+              </TabsList>
+              <TabsContent value="monthly">
+                {isMonthlyFetching ? (
+                  <div className="flex flex-row gap-2">
+                    <p>Calculating</p>
+                    <div className="animate-spin w-fit h-fit">
+                      <FaSpinner />
+                    </div>
+                  </div>
+                ) : (
+                  <ResponsiveContainer
+                    key={"monthly"}
+                    width="100%"
+                    height={350}
+                  >
+                    <BarChart data={monthlyExpenses}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis
+                        dataKey="month"
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <Tooltip contentStyle={{ color: "#000000" }} />
+                      <YAxis
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                        tickFormatter={(value) => `${usePhpPeso(value)}`}
+                      />
+                      <Bar
+                        dataKey="total"
+                        radius={[4, 4, 0, 0]}
+                        className="fill-primary "
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
+              </TabsContent>
+              <TabsContent value="daily">
+                {isThisMonthFetching ? (
+                  <div className="flex flex-row gap-2">
+                    <p>Calculating</p>
+                    <div className="animate-spin w-fit h-fit">
+                      <FaSpinner />
+                    </div>
+                  </div>
+                ) : (
+                  <ResponsiveContainer
+                    key={"monthly"}
+                    width="100%"
+                    height={350}
+                  >
+                    <BarChart data={Object.values(dailyExpenses())}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis
+                        dataKey="day"
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <Tooltip contentStyle={{ color: "#000000" }} />
+                      <YAxis
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                        tickFormatter={(value) => `${usePhpPeso(value)}`}
+                      />
+                      <Bar
+                        dataKey="total"
+                        radius={[4, 4, 0, 0]}
+                        className="fill-primary "
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
       </div>

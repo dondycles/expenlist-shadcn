@@ -21,7 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={montserrat.variable}>
+      <body
+        className={`${montserrat.variable} bg-gradient-to-b from-background to-primary/15 bg-background`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

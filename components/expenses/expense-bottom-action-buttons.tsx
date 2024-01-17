@@ -33,7 +33,7 @@ export default function ExpenseBottomActionButtons({
   const [openCalendar, setOpenCalendar] = useState(false);
 
   return (
-    <div className="flex flex-row items-center justify-between w-full gap-1 bg-primary/25 rounded-[0.5rem] p-1 shadow">
+    <div className="flex flex-row items-center justify-between w-full gap-1 rounded-[0.5rem] ">
       <Popover open={openCalendar} onOpenChange={setOpenCalendar}>
         <PopoverTrigger asChild className="p-0">
           <Button

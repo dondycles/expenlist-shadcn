@@ -103,7 +103,7 @@ export default function History({
                 })}
             </TableBody>
           </Table>
-          <div className="flex flex-row items-center gap-1 p-1 mt-auto mb-0 bg-primary/25 rounded-[0.5rem]">
+          <div className="flex flex-row items-center gap-1 mt-auto mb-0 rounded-[0.5rem]">
             {Number(searchParams.range) > 20 ? (
               <div className="flex flex-row gap-1">
                 <Button size={"sm"} asChild>

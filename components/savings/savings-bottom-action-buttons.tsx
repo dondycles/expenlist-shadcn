@@ -14,8 +14,8 @@ export default function SavingsBottomActionButtons({
   return (
     <div
       className={`${
-        children && "p-1"
-      } flex flex-row gap-1 items-center bg-primary/25 rounded-[0.5rem] shadow`}
+        children && ""
+      } flex flex-row gap-1 items-center  rounded-[0.5rem] shadow`}
     >
       {children}
       <Popover>
