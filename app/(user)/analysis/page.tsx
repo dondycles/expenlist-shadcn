@@ -55,12 +55,6 @@ export default function Analysis() {
     refetchOnWindowFocus: false,
   });
 
-  const { data: thismonth, isFetching: isThisMonthFetching } = useQuery({
-    queryKey: ["expensesanalysisdaily"],
-    queryFn: async () => getDailyExpenses(),
-    refetchOnWindowFocus: false,
-  });
-
   const monthlyExpenses = months.map((month, i) => ({
     month,
     total: totalComputer({
@@ -69,11 +63,11 @@ export default function Analysis() {
     }),
   }));
 
-  const thisMonthsExpenses = thismonth?.success!.map((expense) => ({
-    cost: Number(expense.cost),
-    name: expense.name,
-    date: String(expense.date),
-  }));
+  const { data: thismonth, isFetching: isThisMonthFetching } = useQuery({
+    queryKey: ["expensesanalysisdaily"],
+    queryFn: async () => getDailyExpenses(),
+    refetchOnWindowFocus: false,
+  });
 
   const dailyExpenses = () => {
     const daysInMonth = Array.from(
@@ -91,7 +85,7 @@ export default function Analysis() {
       dailyExpenses[date] = { total: 0, name: date, date, day: i + 1 };
     });
 
-    thisMonthsExpenses?.forEach((expense) => {
+    thismonth?.success!.map((expense) => {
       const date = expense.date;
       const cost = Number(expense.cost);
 
