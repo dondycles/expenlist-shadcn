@@ -31,6 +31,11 @@ import {
 } from "@/components/ui/select";
 import { getDailyExpenses } from "@/actions/analysis/getDailyExpenses";
 import { colors } from "@/lib/colors";
+import { toPhDate } from "@/lib/phdate";
+import { getDaysInMonth } from "date-fns";
+import { daysInEachMonth } from "@/lib/monthsdayscounter";
+import { FaSpinner } from "react-icons/fa";
+import { Loader, Loader2Icon, LoaderIcon } from "lucide-react";
 
 export default function Analysis() {
   var _ = require("lodash");
@@ -77,7 +82,36 @@ export default function Analysis() {
   const thisMonthsExpenses = thismonth?.success!.map((expense) => ({
     cost: Number(expense.cost),
     name: expense.name,
+    date: String(expense.date),
   }));
+
+  const dailyExpenses = () => {
+    const daysInMonth = Array.from(
+      { length: Number(daysInEachMonth(new Date(toPhDate())).days) },
+      (_, index) => index + 1
+    );
+
+    const dailyExpenses: any[any] = {};
+
+    daysInMonth.forEach((day, i) => {
+      const date = `${new Date().getFullYear()}-${String(
+        new Date().getMonth() + 1
+      ).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+      dailyExpenses[date] = { total: 0, name: date, date, day: i + 1 };
+    });
+
+    thisMonthsExpenses?.forEach((expense) => {
+      const date = expense.date;
+      const cost = Number(expense.cost);
+
+      if (dailyExpenses[date]) {
+        dailyExpenses[date].total += cost;
+      }
+    });
+
+    return dailyExpenses;
+  };
 
   return (
     <ScrollArea className="h-full">
@@ -109,7 +143,12 @@ export default function Analysis() {
           <CardContent>
             {expensesState === "monthly" ? (
               isMonthlyFetching ? (
-                <p>Loading...</p>
+                <div className="flex flex-row gap-2">
+                  <p>Calculating</p>
+                  <div className="animate-spin w-fit h-fit">
+                    <FaSpinner />
+                  </div>
+                </div>
               ) : (
                 <ResponsiveContainer key={"monthly"} width="100%" height={350}>
                   <BarChart data={monthlyExpenses}>
@@ -142,28 +181,30 @@ export default function Analysis() {
               isThisMonthFetching ? (
                 <p>Loading...</p>
               ) : (
-                <ResponsiveContainer
-                  key={"thismonth"}
-                  width="100%"
-                  height={350}
-                >
-                  <PieChart width={400} height={400}>
-                    <Tooltip />
-                    <Legend />
-                    <Pie
-                      data={thisMonthsExpenses}
-                      cx="50%"
-                      cy="50%"
-                      fill="#000000"
-                      dataKey="cost"
-                      innerRadius={10}
-                      isAnimationActive={false}
-                    >
-                      {thisMonthsExpenses?.map((_, index) => (
-                        <Cell key={`cell-${index}`} fill={colors[index]} />
-                      ))}
-                    </Pie>
-                  </PieChart>
+                <ResponsiveContainer key={"monthly"} width="100%" height={350}>
+                  <BarChart data={Object.values(dailyExpenses())}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="day"
+                      stroke="#888888"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <Tooltip contentStyle={{ color: "#000000" }} />
+                    <YAxis
+                      stroke="#888888"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                      tickFormatter={(value) => `${usePhpPeso(value)}`}
+                    />
+                    <Bar
+                      dataKey="total"
+                      radius={[4, 4, 0, 0]}
+                      className="fill-primary "
+                    />
+                  </BarChart>
                 </ResponsiveContainer>
               )
             ) : null}
