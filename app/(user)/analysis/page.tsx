@@ -1,19 +1,14 @@
 "use client";
 
 import { getMonthlyExpenses } from "@/actions/analysis/getMonthlyExpenses";
-import { getMonthlySavings } from "@/actions/analysis/getMonthlySavings";
 import { totalComputer } from "@/lib/totalComputer";
 import { usePhpPeso } from "@/lib/phpformatter";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Bar,
   BarChart,
   CartesianGrid,
-  Cell,
-  Legend,
-  Pie,
-  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -30,15 +25,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getDailyExpenses } from "@/actions/analysis/getDailyExpenses";
-import { colors } from "@/lib/colors";
 import { toPhDate } from "@/lib/phdate";
-import { getDaysInMonth } from "date-fns";
 import { daysInEachMonth } from "@/lib/monthsdayscounter";
 import { FaSpinner } from "react-icons/fa";
-import { Loader, Loader2Icon, LoaderIcon } from "lucide-react";
 
 export default function Analysis() {
-  var _ = require("lodash");
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
   const [expensesState, setExpensesState] = useState<"monthly" | "thismonth">(
     "monthly"
@@ -55,21 +60,6 @@ export default function Analysis() {
     queryFn: async () => getDailyExpenses(),
     refetchOnWindowFocus: false,
   });
-
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
 
   const monthlyExpenses = months.map((month, i) => ({
     month,
@@ -179,7 +169,12 @@ export default function Analysis() {
             ) : null}
             {expensesState === "thismonth" ? (
               isThisMonthFetching ? (
-                <p>Loading...</p>
+                <div className="flex flex-row gap-2">
+                  <p>Calculating</p>
+                  <div className="animate-spin w-fit h-fit">
+                    <FaSpinner />
+                  </div>
+                </div>
               ) : (
                 <ResponsiveContainer key={"monthly"} width="100%" height={350}>
                   <BarChart data={Object.values(dailyExpenses())}>
