@@ -2,42 +2,59 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { usePathname } from "next/navigation";
+import { ArrowBigDown, ArrowBigUp, History, Activity } from "lucide-react";
 
 export default function BottomNavBar() {
   const pathname = usePathname();
   return (
-    <div className="flex flex-row justify-center w-full gap-1 p-1 bg-primary/25 rounded-[0.5rem]">
+    <div className="flex flex-row justify-center w-fit mx-auto  rounded-t-[0.5rem] bg-primary/25 p-1 ">
       <Button
-        variant={pathname === "/expenses" ? "default" : "outline"}
+        variant={pathname === "/expenses" ? "default" : "ghost"}
         asChild
-        className="flex-1 text-xs border-none"
-        size={"sm"}
+        className={`flex items-center justify-center text-xs  ${
+          pathname === "/expenses" && "shadow"
+        }`}
+        size={"icon"}
       >
-        <Link href={"/expenses"}>Expenses</Link>
+        <Link href={"/expenses"}>
+          <ArrowBigDown className="w-6 h-6" />
+        </Link>
       </Button>
       <Button
-        className="flex-1 text-xs border-none"
-        variant={pathname === "/savings" ? "default" : "outline"}
+        className={`flex items-center justify-center text-xs  ${
+          pathname === "/savings" && "shadow"
+        }`}
+        variant={pathname === "/savings" ? "default" : "ghost"}
         asChild
-        size={"sm"}
+        size={"icon"}
       >
-        <Link href={"/savings"}>Savings</Link>
+        <Link href={"/savings"}>
+          <ArrowBigUp className="w-6 h-6" />
+        </Link>
       </Button>
       <Button
-        variant={pathname === "/history" ? "default" : "outline"}
+        variant={pathname === "/history" ? "default" : "ghost"}
         asChild
-        className="flex-1 text-xs border-none"
-        size={"sm"}
+        className={`flex items-center justify-center text-xs  ${
+          pathname === "/history" && "shadow"
+        }`}
+        size={"icon"}
       >
-        <Link href={"/history"}>History</Link>
+        <Link href={"/history"}>
+          <History className="w-6 h-6" />
+        </Link>
       </Button>
       <Button
-        variant={pathname === "/analysis" ? "default" : "outline"}
+        variant={pathname === "/analysis" ? "default" : "ghost"}
         asChild
-        className="flex-1 text-xs border-none"
-        size={"sm"}
+        className={`flex items-center justify-center text-xs  ${
+          pathname === "/analysis" && "shadow"
+        }`}
+        size={"icon"}
       >
-        <Link href={"/analysis"}>Analysis</Link>
+        <Link href={"/analysis"}>
+          <Activity className="w-6 h-6" />
+        </Link>
       </Button>
     </div>
   );
