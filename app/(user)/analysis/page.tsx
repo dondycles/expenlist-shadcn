@@ -212,7 +212,7 @@ export default function Analysis() {
                     <ResponsiveContainer
                       key={"monthly"}
                       width="100%"
-                      height={350}
+                      height={244}
                     >
                       <BarChart data={monthlyExpenses}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -259,7 +259,7 @@ export default function Analysis() {
                     <ResponsiveContainer
                       key={"monthly"}
                       width="100%"
-                      height={350}
+                      height={244}
                     >
                       <BarChart data={Object.values(dailyExpenses())}>
                         <CartesianGrid strokeDasharray="3 3" />
