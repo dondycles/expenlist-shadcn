@@ -4,7 +4,6 @@ import { getMonthlyExpenses } from "@/actions/analysis/getMonthlyExpenses";
 import { totalComputer } from "@/lib/totalComputer";
 import { usePhpPeso } from "@/lib/phpformatter";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import {
   Bar,
   BarChart,
@@ -17,29 +16,19 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { getDailyExpenses } from "@/actions/analysis/getDailyExpenses";
 import { toPhDate } from "@/lib/phdate";
 import { daysInEachMonth } from "@/lib/monthsdayscounter";
 import { FaSpinner } from "react-icons/fa";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 export default function Analysis() {
+  var _ = require("lodash");
   const months = [
     "Jan",
     "Feb",
@@ -54,10 +43,6 @@ export default function Analysis() {
     "Nov",
     "Dec",
   ];
-
-  const [expensesState, setExpensesState] = useState<"monthly" | "daily">(
-    "monthly"
-  );
 
   const { data: monthly, isFetching: isMonthlyFetching } = useQuery({
     queryKey: ["expensesanalysis"],
@@ -219,82 +204,100 @@ export default function Analysis() {
               </TabsList>
               <TabsContent value="monthly">
                 {isMonthlyFetching ? (
-                  <div className="flex flex-row gap-2">
-                    <p>Calculating</p>
-                    <div className="animate-spin w-fit h-fit">
-                      <FaSpinner />
-                    </div>
+                  <div className="animate-spin w-fit h-fit">
+                    <FaSpinner />
                   </div>
                 ) : (
-                  <ResponsiveContainer
-                    key={"monthly"}
-                    width="100%"
-                    height={350}
-                  >
-                    <BarChart data={monthlyExpenses}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis
-                        dataKey="month"
-                        stroke="#888888"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <Tooltip contentStyle={{ color: "#000000" }} />
-                      <YAxis
-                        stroke="#888888"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                        tickFormatter={(value) => `${usePhpPeso(value)}`}
-                      />
-                      <Bar
-                        dataKey="total"
-                        radius={[4, 4, 0, 0]}
-                        className="fill-primary "
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
+                  <div>
+                    <ResponsiveContainer
+                      key={"monthly"}
+                      width="100%"
+                      height={350}
+                    >
+                      <BarChart data={monthlyExpenses}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                          dataKey="month"
+                          stroke="#888888"
+                          fontSize={12}
+                          tickLine={false}
+                          axisLine={false}
+                        />
+                        <Tooltip contentStyle={{ color: "#000000" }} />
+                        <YAxis
+                          stroke="#888888"
+                          fontSize={12}
+                          tickLine={false}
+                          axisLine={false}
+                          tickFormatter={(value) => `${usePhpPeso(value)}`}
+                        />
+                        <Bar
+                          dataKey="total"
+                          radius={[4, 4, 0, 0]}
+                          className="fill-primary "
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                    <p>
+                      This year's total expenses:{" "}
+                      <span className="font-semibold text-primary">
+                        {usePhpPeso(
+                          _.sum(monthlyExpenses.map((month) => month.total))
+                        )}
+                      </span>
+                    </p>
+                  </div>
                 )}
               </TabsContent>
               <TabsContent value="daily">
                 {isThisMonthFetching ? (
-                  <div className="flex flex-row gap-2">
-                    <p>Calculating</p>
-                    <div className="animate-spin w-fit h-fit">
-                      <FaSpinner />
-                    </div>
+                  <div className="animate-spin w-fit h-fit">
+                    <FaSpinner />
                   </div>
                 ) : (
-                  <ResponsiveContainer
-                    key={"monthly"}
-                    width="100%"
-                    height={350}
-                  >
-                    <BarChart data={Object.values(dailyExpenses())}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis
-                        dataKey="day"
-                        stroke="#888888"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <Tooltip contentStyle={{ color: "#000000" }} />
-                      <YAxis
-                        stroke="#888888"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                        tickFormatter={(value) => `${usePhpPeso(value)}`}
-                      />
-                      <Bar
-                        dataKey="total"
-                        radius={[4, 4, 0, 0]}
-                        className="fill-primary "
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
+                  <div>
+                    <ResponsiveContainer
+                      key={"monthly"}
+                      width="100%"
+                      height={350}
+                    >
+                      <BarChart data={Object.values(dailyExpenses())}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                          dataKey="day"
+                          stroke="#888888"
+                          fontSize={12}
+                          tickLine={false}
+                          axisLine={false}
+                        />
+                        <Tooltip contentStyle={{ color: "#000000" }} />
+                        <YAxis
+                          stroke="#888888"
+                          fontSize={12}
+                          tickLine={false}
+                          axisLine={false}
+                          tickFormatter={(value) => `${usePhpPeso(value)}`}
+                        />
+                        <Bar
+                          dataKey="total"
+                          radius={[4, 4, 0, 0]}
+                          className="fill-primary "
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                    <p>
+                      This months's total expenses:{" "}
+                      <span className="font-semibold text-primary">
+                        {usePhpPeso(
+                          _.sum(
+                            Object.values(dailyExpenses()).map(
+                              (day: any) => day.total
+                            )
+                          )
+                        )}
+                      </span>
+                    </p>
+                  </div>
                 )}
               </TabsContent>
             </Tabs>

@@ -7,7 +7,7 @@ import { ArrowBigDown, ArrowBigUp, History, Activity } from "lucide-react";
 export default function BottomNavBar() {
   const pathname = usePathname();
   return (
-    <div className="flex flex-row justify-center w-fit mx-auto  rounded-t-[0.5rem] bg-background p-1 ">
+    <div className="flex gap-1 flex-row justify-center w-fit mx-auto  rounded-t-[0.5rem] bg-background p-1 ">
       <Button
         variant={pathname === "/expenses" ? "default" : "ghost"}
         asChild
